@@ -112,10 +112,10 @@ class MongoConsumer:
                     object_image_full_path,
                     time_stamp,
                 ):
-                    # if os.path.exists(object_image_path):
-                    #     os.remove(object_image_path)
-                    # if os.path.exists(object_image_full_path):
-                    #     os.remove(object_image_full_path)
+                    if os.path.exists(object_image_path):
+                        os.remove(object_image_path)
+                    if os.path.exists(object_image_full_path):
+                        os.remove(object_image_full_path)
                     self.collection.delete_one({"_id": document["_id"]})
                     print("Hook success")
             time.sleep(0.05)
