@@ -13,6 +13,9 @@ AIController::AIController(
   num_face_processors = config->num_face_processors;
   face_processor.resize(num_face_processors);
   face_attendance_db = new DB::FaceAttendanceDB();
+
+  // cur_path = currentPath.string();
+  // std::cout << "Current path is: " << cur_path << std::endl;
   InitFaceProcessor();
 }
 
@@ -91,28 +94,24 @@ void AIController::ProcessUpdatingDataThread() {
           auto& object_id = object_updating.object_id;
           auto& camera_name = object_updating.camera_name;
 
-          std::string object_image_file_name =
-              object_id + std::to_string(time_stamp) + ".jpg";
-          std::string object_image_full_file_name =
-              object_id + std::to_string(time_stamp) + "_full.jpg";
-          std::string object_image_path =
-              config->related_image_directory + object_image_file_name;
-          std::string object_image_full_path =
-              config->related_image_directory + object_image_full_file_name;
-
           std::string object_image_save_path =
-              config->object_image_directory_root + object_image_file_name;
-          std::string object_image_full_save_path =
-              config->object_image_directory_root + object_image_full_file_name;
+              config->current_path + config->object_image_directory_root +
+              object_id + std::to_string(time_stamp) + ".jpg";
 
-          FrameSaving frame_saving(object_image, object_image_save_path);
-          frame_saving_queue.push(frame_saving);
+          std::string object_image_full_save_path =
+              config->current_path + config->object_image_directory_root +
+              object_id + std::to_string(time_stamp) + "_full.jpg";
+
           FrameSaving frame_saving_full(object_image_full,
                                         object_image_full_save_path);
           frame_saving_queue.push(frame_saving_full);
+
+          FrameSaving frame_saving(object_image, object_image_save_path);
+          frame_saving_queue.push(frame_saving);
+
           types::FaceAttendanceInfor face_attendance(
-              id, object_image_path, object_image_full_path, camera_id,
-              camera_name, time_stamp);
+              id, object_image_save_path, object_image_full_save_path,
+              camera_id, camera_name, time_stamp);
           face_attendance_db->InsertFaceAttendance(face_attendance);
         }
       }

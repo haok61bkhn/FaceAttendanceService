@@ -79,6 +79,7 @@ void FaceProcessor::RunFaceDetect() {
         cv::Mat aligned_face = face_aligner->AlignFace(
             object.object.object_image, object.landmark);
         float area = (object.object.rect.width * object.object.rect.height);
+
         types::FaceDetFullInfor face_det_item(
             aligned_face, object.object.object_image,
             object.object.object_image_full, object.object_id,
@@ -108,6 +109,7 @@ void FaceProcessor::RunFaceExtract() {
             face_det_item.object_image_full, face_det_item.area,
             face_det_item.time_stamp, face_det_item.camera_id,
             face_det_item.camera_name);
+
         face_extractor->ExtractFace(face_det_item.aligned_face,
                                     object_updating.feature);
         updating_queue.push(object_updating);

@@ -41,6 +41,7 @@ class AppConfig {
   std::string mongo_db;
   std::string mongo_collection;
   std::string ai_directory;
+  std::string current_path;
 
   int num_image_saving_threads;
   int num_face_processors;

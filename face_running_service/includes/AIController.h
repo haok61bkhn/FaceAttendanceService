@@ -3,6 +3,7 @@
 
 #include <types/ObjectInforFull.h>
 #include <atomic>
+#include <filesystem>
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <queue>
@@ -54,6 +55,7 @@ class AIController {
   std::map<std::string, int> ident_trackers;
   DB::FaceAttendanceDB* face_attendance_db;
   FaceManager* face_manager;
+  std::string cur_path;
 };
 
 #endif  // AI_CONTROLLER_H

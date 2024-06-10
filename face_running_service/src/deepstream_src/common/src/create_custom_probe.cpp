@@ -108,12 +108,24 @@ GstPadProbeReturn Probe::CustomProbe(GstPad* pad, GstPadProbeInfo* info,
       object.class_id = obj_meta->class_id;
       object.confidence = obj_meta->confidence;
       object.class_name = obj_meta->obj_label;
-
       object.tracking_id = obj_meta->object_id;
+
       object.object_image = cpu_mat(cv::Rect(x1, y1, x2 - x1, y2 - y1)).clone();
+
+      int padding_full = 50;
+      int x1_full = std::max(0, object.rect.x - padding_full);
+      int y1_full = std::max(0, object.rect.y - padding_full);
+      int x2_full = std::min(cpu_mat.cols,
+                             object.rect.x + object.rect.width + padding_full);
+      int y2_full = std::min(cpu_mat.rows,
+                             object.rect.y + object.rect.height + padding_full);
+      object.object_image_full =
+          cpu_mat(
+              cv::Rect(x1_full, y1_full, x2_full - x1_full, y2_full - y1_full))
+              .clone();
+
       data_frame.objects.push_back(object);
     }
-
     data_frame.last_time = now;
     data_frame.time_stamp = now;
     customData->queue_datas->push(data_frame);

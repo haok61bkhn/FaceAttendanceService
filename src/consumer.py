@@ -67,21 +67,10 @@ class MongoConsumer:
             print("Image {} not found".format(object_image_full_path))
         payload = {
             "faceInfo": {
-                "sex": face_data[0],
-                "age": face_data[1],
+                "id": face_data[0],
+                "name": face_data[1],
                 "image1": image_1,
                 "image2": image_2,
-                "image3": "",
-                "feature": "",
-                "name": face_data[5],
-                "classId": face_data[6],
-                "schoolId": face_data[7],
-                "studentId": face_data[8],
-                "identityCard": face_data[9],
-                "job": face_data[10],
-                "phone": face_data[11],
-                "email": face_data[12],
-                "note": face_data[13],
             },
             "deviceInfo": {
                 "id": self.device_id,
@@ -91,16 +80,17 @@ class MongoConsumer:
                 "time": time_stamp,
             },
         }
-
-        headers = {"Content-Type": "application/json"}
-        response = requests.post(
-            self.hook_url, headers=headers, data=json.dumps(payload)
-        )
-        if response.status_code == 200:
-            return True
-        else:
-            print(response.text)
-            return False
+        print("Payload:", payload)
+        # headers = {"Content-Type": "application/json"}
+        # response = requests.post(
+        #     self.hook_url, headers=headers, data=json.dumps(payload)
+        # )
+        # if response.status_code == 200:
+        #     return True
+        # else:
+        #     print(response.text)
+        #     return False
+        return True
 
     def run(self):
         while True:
@@ -110,12 +100,8 @@ class MongoConsumer:
                 face_id = document["face_id"]
                 camera_id = document["camera_id"]
                 camera_name = document["camera_name"]
-                object_image_path = os.path.join(
-                    settings.DATA_DIR, document["object_image_path"]
-                )
-                object_image_full_path = os.path.join(
-                    settings.DATA_DIR, document["object_image_full_path"]
-                )
+                object_image_path = document["object_image_path"]
+                object_image_full_path = document["object_image_full_path"]
                 time_stamp = document["time_stamp"]
 
                 if self.hook_face(
@@ -126,10 +112,10 @@ class MongoConsumer:
                     object_image_full_path,
                     time_stamp,
                 ):
-                    if os.path.exists(object_image_path):
-                        os.remove(object_image_path)
-                    if os.path.exists(object_image_full_path):
-                        os.remove(object_image_full_path)
+                    # if os.path.exists(object_image_path):
+                    #     os.remove(object_image_path)
+                    # if os.path.exists(object_image_full_path):
+                    #     os.remove(object_image_full_path)
                     self.collection.delete_one({"_id": document["_id"]})
                     print("Hook success")
             time.sleep(0.05)

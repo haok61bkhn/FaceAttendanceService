@@ -334,7 +334,10 @@ void RunServer() {
 }
 
 int main(int argc, char** argv) {
+  std::filesystem::path cwd = std::filesystem::current_path();
+  std::cout << "Current path is: " << cwd << std::endl;
   config->Initialize(CONFIG_FILE);
+  config->current_path = cwd.string() + "/";
   InitFolder();
   InitImageSavingProcess();
   RunServer();
