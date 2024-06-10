@@ -1,0 +1,8 @@
+feature_manager
+DATA
+*.exe
+main
+app
+app.sh
+feature_manager.sh
+main.sh

@@ -1,0 +1,17 @@
+DeployClone
+*.zip
+*.onnx
+*.pyc
+*.engine
+*.pt
+*.so
+*.o
+build
+*.pickle
+data
+*.pkl
+DATA
+*.exe
+main
+build
+dist

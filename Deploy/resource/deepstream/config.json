@@ -1,0 +1,55 @@
+{
+  "common": {
+    "cudadec_mem_type": 0,
+    "nvbuf_memory_type": 0
+  },
+  "source": {
+    "enable": true,
+    "drop_frame_interval": 1,
+    "latency": 1,
+    "gpu_id": 0,
+    "rtsp_reconnect_interval_sec": 10
+  },
+  "streamuxer": {
+    "width": 1920,
+    "height": 1080,
+    "gpu_id": 0,
+    "batched_push_timeout": 40000
+  },
+  "gie": {
+    "detection": {
+      "enable": true,
+      "batch_size": 1,
+      "interval": 0,
+      "unique_id": 0,
+      "gpu_id": 0,
+      "model_config": "resource/deepstream/configs/face_detection/yolov8_face.txt"
+    }
+  },
+  "tracking": {
+    "enable": true,
+    "display_tracking_id": 1,
+    "tracker_width": 640,
+    "tracker_height": 384,
+    "gpu_id": 0,
+    "ll_lib_file": "/opt/nvidia/deepstream/deepstream/lib/libnvds_nvmultiobjecttracker.so",
+    "ll_config_file": "resource/deepstream/configs/tracker/config_tracker_NvDCF_perf.yml",
+    "enable-batch-process": 1
+  },
+  "tiler": {
+    "enable": true,
+    "rows": 1,
+    "columns": 2,
+    "width": 1920,
+    "height": 1080,
+    "gpu_id": 0
+  },
+  "sink": {
+    "enable": true,
+    "sink_list": [
+      {
+        "type": "rtsp"
+      }
+    ]
+  }
+}

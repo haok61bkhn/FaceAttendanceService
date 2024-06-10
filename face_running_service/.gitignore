@@ -1,0 +1,9 @@
+*.pyc
+*.so
+*.o
+*.onnx
+*.engine
+*.trt
+build
+DATA
+*.mp4

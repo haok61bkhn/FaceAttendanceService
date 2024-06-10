@@ -1,0 +1,7 @@
+IRESNET:
+  onnx_file: "resources/Face/iresnet124_1.onnx"
+  engine_file: "resources/Face/iresnet124_1.engine"
+  BATCH_SIZE: 1
+  INPUT_CHANNEL: 3
+  IMAGE_WIDTH: 112
+  IMAGE_HEIGHT: 112

@@ -1,0 +1,13 @@
+fastapi==0.103.0
+uvicorn[standard]==0.23.0
+python-jose[cryptography]
+passlib[bcrypt]
+pydantic[email]==2.3.0
+pydantic-settings==2.0.0
+requests
+bcrypt==3.2.0
+opencv-python
+python-multipart
+grpcio
+google
+pymongo

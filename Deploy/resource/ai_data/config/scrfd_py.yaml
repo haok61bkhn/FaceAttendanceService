@@ -1,0 +1,9 @@
+SCRFD:
+    onnx_file: "weights/scrfd_2.5g_1.onnx"
+    engine_file: "weights/scrfd_2.5g_1.trt"
+    BATCH_SIZE: 1
+    INPUT_CHANNEL: 3
+    IMAGE_WIDTH: 640
+    IMAGE_HEIGHT: 640
+    obj_threshold: 0.4
+    nms_threshold: 0.45

@@ -1,0 +1,9 @@
+[submodule "python/third_party/pybind11_opencv_numpy"]
+	path = python/third_party/pybind11_opencv_numpy
+	url = https://github.com/edmBernard/pybind11_opencv_numpy.git
+[submodule "python/third_party/pybind11"]
+	path = python/third_party/pybind11
+	url = https://github.com/pybind/pybind11.git
+[submodule "convert/yolov8_detection"]
+	path = convert/yolov8_detection
+	url = https://github.com/haok61bkhn/YOLOV8_Detection_TensorRT.git

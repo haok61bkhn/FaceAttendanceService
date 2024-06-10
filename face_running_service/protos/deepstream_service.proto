@@ -1,0 +1,72 @@
+syntax = "proto3";
+package deepstream_service;
+
+service DeepstreamService {
+    rpc InsertCamera(CameraItem) returns (StatusResponse) {}
+    rpc RemoveCamera(CameraID) returns (StatusResponse) {}
+    rpc RestartCamera(CameraID) returns (StatusResponse) {}
+    rpc UpdateMainImage(CameraID) returns (StatusResponse) {}
+    rpc UpdateROI(ROI) returns (StatusResponse) {}
+    rpc GetMainImage(CameraID) returns (MainImage) {}
+    rpc GetCameraStatus(CameraID) returns (CameraStatus) {}
+    rpc GetCameraStatusList(Empty) returns (CameraStatusList) {}
+    rpc InsertFace(FaceItem) returns (InsertStatusReponse) {}
+    rpc RemoveFace(FaceID) returns (StatusResponse) {}
+    rpc GetFaceIDs(Empty) returns (FaceIDs) {}
+
+
+
+}
+
+message CameraItem{
+    string camera_id = 1;
+    string camera_url = 2;
+    string camera_name = 3;
+}
+message CameraID{
+    string camera_id = 1;
+}
+message Empty{}
+
+message StatusResponse{
+    bool status = 1;
+    string message = 2;
+}
+message ROI{
+    string camera_id = 1;
+    repeated int32 polygon = 2;
+}
+
+message MainImage{
+    string image_path = 1;
+}
+
+message CameraStatus{
+    string camera_id = 1;
+    string camera_name = 2;
+    bool active = 3;
+    float fps = 4;
+}
+
+message CameraStatusList{
+    repeated CameraStatus camera_status_list = 1;
+}
+
+message FaceItem{
+    string face_id = 1;
+    repeated string face_image_paths = 2;
+}
+message FaceID{
+    string face_id = 1;
+}
+message FaceIDs{
+    repeated string face_ids = 1;
+}
+
+message InsertStatusReponse{
+    bool status = 1;
+    string message = 2;
+    repeated string face_crop_image_paths = 3;
+}
+
+// [END messages]

@@ -1,0 +1,1 @@
+cd /home/haobk/Desktop/Mydata/FaceServiceBAE/Deploy/install && docker-compose up -d --remove-orphans

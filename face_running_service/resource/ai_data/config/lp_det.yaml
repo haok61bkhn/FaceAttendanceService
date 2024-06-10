@@ -1,0 +1,10 @@
+LP_DET:
+    onnx_file: "resources/LicensePlate/lpdet_3.onnx"
+    engine_file: "resources/LicensePlate/lpdet_3.engine"
+    BATCH_SIZE: 1
+    INPUT_CHANNEL: 3
+    IMAGE_WIDTH: 320
+    IMAGE_HEIGHT: 320
+    topk: 100
+    score_thres: 0.25
+    iou_thres: 0.65

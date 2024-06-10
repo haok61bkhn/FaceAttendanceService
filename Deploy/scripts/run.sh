@@ -1,0 +1,2 @@
+BINARY=./build/main
+$BINARY

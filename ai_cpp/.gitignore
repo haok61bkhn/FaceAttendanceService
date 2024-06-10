@@ -1,0 +1,12 @@
+*.pt
+*.trt
+*.engine
+build
+*.pyc
+*.so
+*.o
+*egg-info
+*.mp4
+weights/yolov8_lpn.onnx
+weights/yolov8s_char.onnx
+*.onnx
