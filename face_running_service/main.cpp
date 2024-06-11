@@ -241,8 +241,9 @@ class DeepstreamServicempl final : public DeepstreamService::Service {
       reply->set_message("Face added");
 
       for (auto& face_crop : face_crops) {
-        std::string face_crop_path =
-            config->face_feature_directory + RandomString(5) + ".jpg";
+        std::string face_crop_path = config->current_path +
+                                     config->face_feature_directory +
+                                     RandomString(5) + ".jpg";
         cv::imwrite(face_crop_path, face_crop);
         reply->add_face_crop_image_paths(face_crop_path);
       }

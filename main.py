@@ -144,6 +144,7 @@ def add_faces(data: Face):
 
 def get_faces():
     data = user_db.get_users()
+    print(data)
     if data is None:
         return []
     else:

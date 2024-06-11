@@ -15,7 +15,7 @@ class UserDB:
         self.create_table()
         users = self.get_users()
         for user in users:
-            self.data_map[user[8]] = user
+            self.data_map[user[0]] = user
 
     def create_connection(self):
         try:

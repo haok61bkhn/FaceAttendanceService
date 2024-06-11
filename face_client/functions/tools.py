@@ -68,6 +68,20 @@ def register_face(face_id, name, image_paths, token, ip):
         return False, str(e)
 
 
+def get_faces(token, ip):
+    try:
+        url = ip + "/faces"
+        headers = {"Authorization": "Bearer " + token}
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            return response.json()["data"]["faces"]
+        else:
+            return []
+    except Exception as e:
+        print(e)
+        return []
+
+
 def create_folder(folder):
     if not os.path.exists(folder):
         os.makedirs(folder)

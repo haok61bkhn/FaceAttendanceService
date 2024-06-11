@@ -1,7 +1,10 @@
 from PyQt5 import QtWidgets
-from .tools import open_files_dialog, register_face
+from .tools import open_files_dialog, register_face, get_faces, base64_to_cv2
 from PyQt5.QtCore import pyqtSignal as Signal
 from PyQt5.QtGui import QPixmap, QImage
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
+from PyQt5.QtGui import QStandardItem, QStandardItemModel
+import cv2
 
 
 class FaceRegisterUI(QtWidgets.QTabWidget):
@@ -20,6 +23,9 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
     def create_event(self):
         self.ui.bn_open_images.clicked.connect(self.open_images)
         self.ui.bn_register.clicked.connect(self.regist_event)
+        self.ui.bn_clear.clicked.connect(self.clear)
+        self.ui.bn_get_faces.clicked.connect(self.get_face_list)
+        self.ui.tb_faces.clicked.connect(self.select_row_event)
 
     def first_init(self):
         self.register_images = [
@@ -34,10 +40,19 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
             self.ui.frame_image_3,
             self.ui.frame_image_4,
         ]
-
+        self.model = None
         for img, f in zip(self.register_images, self.register_frames):
             img.setScaledContents(True)
-
+        self.titles = ["Face ID", "Name"]
+        self.keys = ["faceId", "name"]
+        self.model = QStandardItemModel()
+        self.model.setHorizontalHeaderLabels(self.titles)
+        self.ui.tb_faces.setModel(self.model)
+        self.ui.tb_faces.horizontalHeader().setStretchLastSection(True)
+        self.ui.tb_faces.horizontalHeader().setSectionResizeMode(
+            QtWidgets.QHeaderView.Stretch
+        )
+        self.ui.tb_faces.setSelectionBehavior(QTableWidget.SelectRows)
         self.create_event()
 
     def init(self):
@@ -46,6 +61,11 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
     def clear(self):
         self.clear_register_text()
         self.clear_register_images()
+        self.clear_select_image()
+
+    def clear_select_image(self):
+        self.ui.lb_image_face.clear()
+        self.ui.tb_faces.clearSelection()
 
     def clear_register_images(self):
         self.file_paths = []
@@ -102,4 +122,35 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
                 self.message_signal.emit("Thất bại", message)
             else:
                 self.message_signal.emit("Thành công", "Đăng ký thành công")
+                self.get_face_list()
                 self.clear()
+
+    def get_face_list(self):
+        self.faces = get_faces(self.ui.token, self.ui.ip)
+        self.model.clear()
+        self.model.setHorizontalHeaderLabels(self.titles)
+        for face in self.faces:
+            row = []
+            for key in self.keys:
+                item = QStandardItem(str(face[key]))
+                row.append(item)
+            self.model.appendRow(row)
+
+    def select_row_event(self):
+        selected = self.ui.tb_faces.selectedIndexes()
+        if len(selected) == 0:
+            return
+        row = selected[0].row()
+        image1 = self.faces[row]["image1"]
+        if image1 != "":
+            image1_cv = base64_to_cv2(image1)
+            image1_cv = cv2.cvtColor(image1_cv, cv2.COLOR_BGR2RGB)
+            image1_qt = QImage(
+                image1_cv.data,
+                image1_cv.shape[1],
+                image1_cv.shape[0],
+                QImage.Format_RGB888,
+            )
+            # set scaled content keeps the aspect ratio of the image
+            self.ui.lb_image_face.setScaledContents(True)
+            self.ui.lb_image_face.setPixmap(QPixmap.fromImage(image1_qt))
