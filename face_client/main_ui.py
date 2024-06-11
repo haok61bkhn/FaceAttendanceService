@@ -16,23 +16,23 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QPropertyAnimation
 from PyQt5.QtWidgets import QAction
 from database.login_db import LoginDB
-from multiprocessing import Queue
 import cv2
 import threading
+
 
 DATA_DIR = "DATA"
 
 
-class Ui(QtWidgets.QMainWindow):
-    def __init__(self):
-        super(Ui, self).__init__()
+class MainUi(QtWidgets.QMainWindow):
+    def __init__(self, face_queue):
+        super(MainUi, self).__init__()
         uic.loadUi("ui/main.ui", self)
         self.menu_frames = [
             self.frame_login,
             self.frame_main,
             self.frame_face_register,
         ]
-        self.face_queue = Queue()
+        self.face_queue = face_queue
         self.status = True
         self.data_dir = DATA_DIR
         self.menu_btns = [self.bn_login, self.bn_main, self.bn_face_register]
@@ -176,12 +176,6 @@ class Ui(QtWidgets.QMainWindow):
 
     def clear_page(self):
         if self.current_index == 1:
-            self.page_1_ui.clear()
+            self.main_th.clear()
         elif self.current_index == 2:
             self.face_register_ui.clear()
-
-
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    window = Ui()
-    app.exec_()
