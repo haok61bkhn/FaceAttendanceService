@@ -24,7 +24,6 @@ consumer = MongoConsumer(
     settings.MONGO_COLLECTION,
     settings.DEVICE_ID,
     settings.DEVICE_NAME,
-    settings.HOOK_URL,
 )
 thread = threading.Thread(target=consumer.run)
 thread.daemon = True
@@ -54,6 +53,16 @@ def add_camera(camera_name: str, camera_url: str):
 
 def remove_camera(camera_id):
     return deepstream_manager.remove_camera(camera_id)
+
+
+def set_hook_url(hook_url):
+    if hook_url != "":
+        if hook_url[-1] != "/":
+            hook_url += "/"
+        hook_url += "face_item"
+        consumer.set_hook_url(hook_url)
+        return True
+    return False
 
 
 def get_cameras():

@@ -5,7 +5,7 @@ from src import app_configs, settings
 from typing import Dict, Any
 from auth.models import User
 from auth.auth import get_current_user
-from src.models import Face, CommonResponse, Camera
+from src.models import Face, CommonResponse, Camera, HookInfo
 import main
 import uvicorn
 
@@ -28,6 +28,17 @@ app.include_router(auth_router, tags=["auth"])
 )
 async def healthcheck():
     return {"status": "ok", "code": 200, "message": "Healthcheck", "error": False}
+
+
+@app.post("/set_hook", include_in_schema=True, response_model=CommonResponse)
+async def set_hook(hook: HookInfo, current_user: User = Depends(get_current_user)):
+    status = main.set_hook_url(hook.url)
+    return {
+        "status": status,
+        "message": "Hook url set successfully",
+        "code": 200,
+        "error": False,
+    }
 
 
 @app.get(

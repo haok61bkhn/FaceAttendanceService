@@ -7,6 +7,7 @@ from PyQt5 import QtWidgets
 import sys
 import threading
 import cv2
+from functions.tools import base64_to_cv2
 
 app = FastAPI()
 face_queue = Queue()
@@ -15,7 +16,11 @@ face_queue = Queue()
 @app.post("/face_item")
 def create_face_item(face_item: FaceItem):
     global face_queue
-    face_queue.put((cv2.imread(face_item.image), face_item.name, face_item.score))
+    try:
+        image = base64_to_cv2(face_item.image)
+        face_queue.put((image, face_item.name, face_item.score))
+    except Exception as e:
+        pass
     return {"code": 200, "message": "Success"}
 
 

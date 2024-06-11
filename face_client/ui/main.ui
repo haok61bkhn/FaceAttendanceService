@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1473</width>
+    <width>993</width>
     <height>926</height>
    </rect>
   </property>
@@ -762,7 +762,7 @@ QPushButton:pressed {
                 <string notr="true"/>
                </property>
                <property name="currentIndex">
-                <number>1</number>
+                <number>0</number>
                </property>
                <widget class="QWidget" name="page_login">
                 <property name="styleSheet">
@@ -981,6 +981,41 @@ font:  &quot;Times New Roman&quot;;
                         </widget>
                        </item>
                        <item>
+                        <widget class="QWidget" name="widget_14" native="true">
+                         <layout class="QHBoxLayout" name="horizontalLayout_30">
+                          <item>
+                           <widget class="QLabel" name="label_38">
+                            <property name="minimumSize">
+                             <size>
+                              <width>150</width>
+                              <height>0</height>
+                             </size>
+                            </property>
+                            <property name="maximumSize">
+                             <size>
+                              <width>150</width>
+                              <height>16777215</height>
+                             </size>
+                            </property>
+                            <property name="text">
+                             <string>HOOK URL</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QLineEdit" name="bt_hook_url"/>
+                          </item>
+                          <item>
+                           <widget class="QPushButton" name="bt_set_hook">
+                            <property name="text">
+                             <string>Set</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item>
                         <widget class="QFrame" name="frame_12">
                          <property name="frameShape">
                           <enum>QFrame::NoFrame</enum>
@@ -1007,7 +1042,7 @@ font:  &quot;Times New Roman&quot;;
                           <item alignment="Qt::AlignRight">
                            <widget class="QCheckBox" name="cb_remember_login">
                             <property name="text">
-                             <string>Nhớ thông tin đăng nhập</string>
+                             <string>Nhớ thông tin</string>
                             </property>
                            </widget>
                           </item>

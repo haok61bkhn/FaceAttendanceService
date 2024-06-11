@@ -17,7 +17,7 @@ class MongoConsumer:
         mongo_collection,
         device_id,
         device_name,
-        hook_url,
+        hook_url="",
     ):
         self.user_db = user_db
         self.mongo_url = mongo_url
@@ -36,6 +36,9 @@ class MongoConsumer:
         self.db = self.client[self.mongo_db]
         self.collection = self.db[self.mongo_collection]
 
+    def set_hook_url(self, hook_url):
+        self.hook_url = hook_url
+
     def hook_face(
         self,
         face_id,
@@ -45,6 +48,8 @@ class MongoConsumer:
         object_image_full_path,
         time_stamp,
     ):
+        if self.hook_url == "":
+            return True
         if face_id not in self.user_db.data_map:
             print("Face not found in database")
             return True
@@ -57,39 +62,20 @@ class MongoConsumer:
             time.sleep(0.1)
             object_image = cv2.imread(object_image_path)
             object_image_full = cv2.imread(object_image_full_path)
-        if object_image is not None:
-            image_1 = cv2_to_base64(object_image)
-        else:
-            print("Image {} not found".format(object_image_path))
         if object_image_full is not None:
             image_2 = cv2_to_base64(object_image_full)
-        else:
-            print("Image {} not found".format(object_image_full_path))
-        payload = {
-            "faceInfo": {
-                "id": face_data[0],
+            data = {
+                "image": image_2,
                 "name": face_data[1],
-                "image1": image_1,
-                "image2": image_2,
-            },
-            "deviceInfo": {
-                "id": self.device_id,
-                "name": self.device_name,
+                "score": 1.0,
+                "timestamp": time_stamp,
                 "camera_name": camera_name,
-                "camera_id": camera_id,
-                "time": time_stamp,
-            },
-        }
-        # print("Payload:", payload)
-        # headers = {"Content-Type": "application/json"}
-        # response = requests.post(
-        #     self.hook_url, headers=headers, data=json.dumps(payload)
-        # )
-        # if response.status_code == 200:
-        #     return True
-        # else:
-        #     print(response.text)
-        #     return False
+            }
+            try:
+                response = requests.post(self.hook_url, json=data)
+                print("Hook response:", response.text)
+            except Exception as e:
+                pass
         return True
 
     def run(self):
