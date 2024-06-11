@@ -9,6 +9,7 @@ from functions.tools import (
     hide_text_button,
     show_text_button,
     message,
+    create_folder,
 )
 from functions import (
     LoginUI,
@@ -18,6 +19,9 @@ from functions import (
 from PyQt5 import QtCore
 from PyQt5.QtCore import QPropertyAnimation
 from PyQt5.QtWidgets import QAction
+from database.login_db import LoginDB
+
+DATA_DIR = "DATA"
 
 
 class Ui(QtWidgets.QMainWindow):
@@ -29,10 +33,17 @@ class Ui(QtWidgets.QMainWindow):
             self.frame_page_1,
             self.frame_face_register,
         ]
+        self.data_dir = DATA_DIR
         self.menu_btns = [self.bn_login, self.bn_page_1, self.bn_face_register]
         self.menu_names = ["Login", "Page 1", "Page 2"]
         self.show()
         self.first_init()
+
+    def init_folder(self):
+        create_folder(self.data_dir)
+
+    def init_db(self):
+        self.login_db = LoginDB(f"{self.data_dir}/login.db")
 
     def create_event(self):
         self.bn_login.clicked.connect(self.show_login)
@@ -42,10 +53,19 @@ class Ui(QtWidgets.QMainWindow):
         self.page_login_ui.message_signal.connect(message)
         self.page_login_ui.login_success_signal.connect(self.login_success)
         self.page_login_ui.logout_success_signal.connect(self.logout_success)
+        self.face_register_ui.message_signal.connect(message)
 
     def first_init(self):
         self.status = True
+        self.init_folder()
+        self.init_db()
         self.init_ui()
+        login_infor = self.login_db.get_login_infor()
+        if login_infor:
+            login_infor = login_infor[0]
+            self.bt_username.setText(login_infor[2])
+            self.bt_password.setText(login_infor[3])
+            self.bt_ip.setText(login_infor[1])
         self.stackedWidget.setCurrentWidget(self.page_login)
         self.current_index = 0
         self.show_login()
@@ -59,6 +79,7 @@ class Ui(QtWidgets.QMainWindow):
         quit.triggered.connect(self.closeEvent)
 
     def init_ui(self):
+        self.cb_remember_login.setChecked(True)
         self.page_login_ui = LoginUI(self.page_login, self)
         self.page_1_ui = Page1(self.page_1, self)
         self.face_register_ui = FaceRegisterUI(self.page_face_register, self)
@@ -66,6 +87,12 @@ class Ui(QtWidgets.QMainWindow):
     def login_success(self):
         for fr in self.menu_frames:
             fr.show()
+        if self.cb_remember_login.isChecked():
+            self.login_db.save_login_infor(
+                self.bt_ip.text(), self.bt_username.text(), self.bt_password.text()
+            )
+        else:
+            self.login_db.delete_login_infor()
 
     def logout_success(self):
         for fr in self.menu_frames:

@@ -9,7 +9,7 @@ from typing import Union
 # openssl rand -hex 32
 SECRET_KEY = "9b1f2e2a0b6a4e789cb3e7b4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 10000
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

@@ -104,14 +104,22 @@ def add_faces(data: Face):
                 image_path = os.path.join(image_dir, f"{data.faceId}_2.jpg")
                 cv2.imwrite(image_path, image)
                 image_paths.append(image_path)
+        if data.image4:
+            image = base64_to_cv2(data.image4)
+            if image is None:
+                return False, "Image4 is not valid"
+            else:
+                image_path = os.path.join(image_dir, f"{data.faceId}_3.jpg")
+                cv2.imwrite(image_path, image)
+                image_paths.append(image_path)
 
         status, face_crop_paths, message = deepstream_manager.insert_face(
             faceId, image_paths
         )
 
         if status:
-            if len(face_crop_paths) < 3:
-                for i in range(3 - len(face_crop_paths)):
+            if len(face_crop_paths) < 4:
+                for i in range(4 - len(face_crop_paths)):
                     face_crop_paths.append(None)
             data = [
                 faceId,
@@ -119,6 +127,7 @@ def add_faces(data: Face):
                 face_crop_paths[0],
                 face_crop_paths[1],
                 face_crop_paths[2],
+                face_crop_paths[3],
             ]
 
             status, message = user_db.add_user(data)
@@ -146,6 +155,7 @@ def get_faces():
                 "image1": "",
                 "image2": "",
                 "image3": "",
+                "image4": "",
             }
             image_path_1 = row[2]
             image_1 = cv2.imread(image_path_1)
@@ -161,6 +171,11 @@ def get_faces():
                 image_3 = cv2.imread(image_path_3)
                 if image_3 is not None:
                     face["image3"] = cv2_to_base64(image_3)
+            image_path_4 = row[5]
+            if image_path_4 is not None:
+                image_4 = cv2.imread(image_path_4)
+                if image_4 is not None:
+                    face["image4"] = cv2_to_base64(image_4)
             faces.append(face)
         return faces
 
@@ -176,6 +191,7 @@ def get_face(faceId: str):
             "image1": "",
             "image2": "",
             "image3": "",
+            "image4": "",
         }
         image_path_1 = data[2]
 
@@ -192,6 +208,11 @@ def get_face(faceId: str):
             image_3 = cv2.imread(image_path_3)
             if image_3 is not None:
                 face["image3"] = cv2_to_base64(image_3)
+        image_path_4 = data[5]
+        if image_path_4 is not None:
+            image_4 = cv2.imread(image_path_4)
+            if image_4 is not None:
+                face["image4"] = cv2_to_base64(image_4)
 
         return face
 

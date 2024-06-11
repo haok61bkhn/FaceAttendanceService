@@ -22,45 +22,53 @@ def cv2_to_base64(image):
 
 
 def login(username, password, ip):
-    ip = "http://127.0.0.1:8000"
-    url = ip + "/login"
-    username = "device_id_01"
-    password = "device_01"
-    response = requests.post(
-        url,
-        data={"username": username, "password": password},
-        headers={"Content-Type": "application/x-www-form-urlencoded"},
-    )
-    if response.status_code == 200:
-        return True, True, response.json()["access_token"]
-    else:
+    try:
+        url = ip + "/login"
+        response = requests.post(
+            url,
+            data={"username": username, "password": password},
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+        )
+        if response.status_code == 200:
+            return True, True, response.json()["access_token"]
+        else:
+            return False, False, None
+    except Exception as e:
+        print(e)
         return False, False, None
 
 
 def register_face(face_id, name, image_paths, token, ip):
-    ip = "http://127.0.0.1:8000"
-    url = ip + "/faces"
-    headers = {"Authorization": "Bearer " + token}
-    base64_images = []
-    for path in image_paths:
-        base64_images.append(cv2_to_base64(cv2.imread(path)))
+    try:
+        url = ip + "/faces"
+        headers = {"Authorization": "Bearer " + token}
+        base64_images = []
+        for path in image_paths:
+            base64_images.append(cv2_to_base64(cv2.imread(path)))
+        if len(base64_images) < 4:
+            for i in range(4 - len(base64_images)):
+                base64_images.append("")
 
-    data = {
-        "face_id": face_id,
-        "name": name,
-        "image1": base64_images[0],
-        "image2": base64_images[1],
-        "image3": base64_images[2],
-    }
-    response = requests.post(url, data=data, headers=headers)
-    print(response.json())
-    if response.status_code == 200:
-        return True
-    else:
-        return False
+        data = {
+            "faceId": face_id,
+            "name": name,
+            "image1": base64_images[0],
+            "image2": base64_images[1],
+            "image3": base64_images[2],
+            "image4": base64_images[3],
+        }
+        response = requests.post(url, json=data, headers=headers)
+        if response.status_code == 200:
+            json_data = response.json()
+            return json_data["status"], json_data["message"]
+        else:
+            return False, "Lỗi server"
+    except Exception as e:
+        print(e)
+        return False, str(e)
 
 
-def creat_folder(folder):
+def create_folder(folder):
     if not os.path.exists(folder):
         os.makedirs(folder)
 

@@ -37,9 +37,9 @@ class LoginUI(QtWidgets.QTabWidget):
         if not success:
             self.message_signal.emit("Thất bại", "Sai tên đăng nhập hoặc mật khẩu")
             return
-        self.username = username
-        self.password = password
-        self.ip = ip
+        self.ui.username = username
+        self.ui.password = password
+        self.ui.ip = ip
         if is_admin:
 
             self.message_signal.emit("Thành công", "Đăng nhập thành công admin")

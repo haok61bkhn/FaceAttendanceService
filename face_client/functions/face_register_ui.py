@@ -1,11 +1,11 @@
 from PyQt5 import QtWidgets
-from .tools import open_files_dialog
+from .tools import open_files_dialog, register_face
 from PyQt5.QtCore import pyqtSignal as Signal
-from PyQt5.QtGui import QPixmap as Pixmap
+from PyQt5.QtGui import QPixmap, QImage
 
 
 class FaceRegisterUI(QtWidgets.QTabWidget):
-    show_message_signal = Signal(str)
+    message_signal = Signal(str, str)
 
     def __init__(
         self,
@@ -14,7 +14,7 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
     ):
         super().__init__(parent)
         self.ui = ui
-        parent.hide()
+        self.hide()
         self.first_init()
 
     def create_event(self):
@@ -37,8 +37,6 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
 
         for img, f in zip(self.register_images, self.register_frames):
             img.setScaledContents(True)
-            size = f.size()
-            img.setFixedSize(size.width(), size.height())
 
         self.create_event()
 
@@ -60,32 +58,48 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
         self.ui.bt_name.clear()
         self.ui.bt_face_id.clear()
 
+    def setPixmap(self, path, size, label):
+        q_img = QImage(path)
+        label.setPixmap(QPixmap(q_img).scaled(size[0], size[1]))
+
     def open_images(self):
         self.clear_register_images()
         file_paths = open_files_dialog()
         if len(file_paths) == 0:
             return
         if len(file_paths) > 4:
-            self.show_message_signal.emit("Tối đa 4 ảnh")
+            self.message_signal.emit("Thất bại", "Tối đa 4 ảnh")
             return
+        size_x = self.ui.frame_register_image.width() // 4
+        size_y = self.ui.frame_register_image.height() // 4
+        size = (size_x - 6, size_y)
+        unknow_path = "ui/images/unknow.png"
+        self.file_paths = file_paths.copy()
+        for i in range(4 - len(file_paths)):
+            file_paths.append(unknow_path)
         for i, path in enumerate(file_paths):
             if i == 0:
-                self.ui.lb_image_1.setPixmap(Pixmap(path))
+                self.setPixmap(path, size, self.ui.lb_image_1)
             elif i == 1:
-                self.ui.lb_image_2.setPixmap(Pixmap(path))
+                self.setPixmap(path, size, self.ui.lb_image_2)
             elif i == 2:
-                self.ui.lb_image_3.setPixmap(Pixmap(path))
+                self.setPixmap(path, size, self.ui.lb_image_3)
             elif i == 3:
-                self.ui.lb_image_4.setPixmap(Pixmap(path))
-        self.file_paths = file_paths
+                self.setPixmap(path, size, self.ui.lb_image_4)
 
     def regist_event(self):
         name = self.ui.bt_name.text()
         face_id = self.ui.bt_face_id.text()
         image_paths = self.file_paths
         if name == "" or face_id == "" or len(image_paths) == 0:
-            self.show_message_signal.emit("Vui lòng nhập đầy đủ thông tin")
+            self.message_signal.emit("Thất bại", "Vui lòng nhập đầy đủ thông tin")
             return
         else:
-            # register face
-            pass
+            status, message = register_face(
+                face_id, name, image_paths, self.ui.token, self.ui.ip
+            )
+            if not status:
+                self.message_signal.emit("Thất bại", message)
+            else:
+                self.message_signal.emit("Thành công", "Đăng ký thành công")
+                self.clear()

@@ -25,11 +25,32 @@ def get_user_info(token: str):
         raise Exception("Could not fetch user info")
 
 
+def add_user(token: str):
+    data = {
+        "faceId": "abvc",
+        "name": "John Doe",
+        "image1": "",
+        "image2": "",
+        "image3": "",
+    }
+    url = "http://127.0.0.1:8000/faces"
+    response = requests.post(
+        url, headers={"Authorization": f"Bearer {token}"}, json=data
+    )
+    if response.status_code == 200:
+        print(response.json())
+        return response.json()
+    else:
+        raise Exception("Could not add user")
+
+
 if __name__ == "__main__":
     username = "device_id_01"
     password = "device_01"
     token = get_token(username, password)
     print(f"Access Token: {token}")
 
-    user_info = get_user_info(token)
-    print(f"User Info: {user_info}")
+    # user_info = get_user_info(token)
+    # print(f"User Info: {user_info}")
+
+    add_user(token)

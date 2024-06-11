@@ -80,7 +80,7 @@ class MongoConsumer:
                 "time": time_stamp,
             },
         }
-        print("Payload:", payload)
+        # print("Payload:", payload)
         # headers = {"Content-Type": "application/json"}
         # response = requests.post(
         #     self.hook_url, headers=headers, data=json.dumps(payload)

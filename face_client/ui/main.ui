@@ -762,7 +762,7 @@ QPushButton:pressed {
                 <string notr="true"/>
                </property>
                <property name="currentIndex">
-                <number>0</number>
+                <number>2</number>
                </property>
                <widget class="QWidget" name="page_login">
                 <property name="styleSheet">
@@ -980,6 +980,40 @@ font:  &quot;Times New Roman&quot;;
                          </layout>
                         </widget>
                        </item>
+                       <item>
+                        <widget class="QFrame" name="frame_12">
+                         <property name="frameShape">
+                          <enum>QFrame::NoFrame</enum>
+                         </property>
+                         <property name="frameShadow">
+                          <enum>QFrame::Plain</enum>
+                         </property>
+                         <layout class="QHBoxLayout" name="horizontalLayout_10">
+                          <property name="spacing">
+                           <number>0</number>
+                          </property>
+                          <property name="leftMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="topMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="rightMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="bottomMargin">
+                           <number>0</number>
+                          </property>
+                          <item alignment="Qt::AlignRight">
+                           <widget class="QCheckBox" name="cb_remember_login">
+                            <property name="text">
+                             <string>Nhớ thông tin đăng nhập</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
                       </layout>
                      </widget>
                     </item>
@@ -1131,7 +1165,7 @@ QGroupBox::title {
                       </property>
                       <layout class="QVBoxLayout" name="verticalLayout_5">
                        <item>
-                        <widget class="QFrame" name="frame_2">
+                        <widget class="QFrame" name="frame_register_image">
                          <property name="minimumSize">
                           <size>
                            <width>0</width>

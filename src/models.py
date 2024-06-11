@@ -25,4 +25,4 @@ class Face(BaseModel):
     image1: str
     image2: Optional[str] = None
     image3: Optional[str] = None
-    feature: Optional[str] = None
+    image4: Optional[str] = None

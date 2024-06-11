@@ -31,7 +31,8 @@ class UserDB:
                 name STRING NOT NULL,
                 image1 STRING NOT NULL,
                 image2 STRING,
-                image3 STRING
+                image3 STRING,
+                image4 STRING
             );
             
         """
@@ -45,8 +46,8 @@ class UserDB:
     def add_user(self, data: Dict[str, Any]):
         query = """
             INSERT
-            INTO UserDB (faceId, name, image1, image2, image3)
-            VALUES (?, ?, ?, ?, ?);
+            INTO UserDB (faceId, name, image1, image2, image3, image4)
+            VALUES (?, ?, ?, ?, ?, ?);
         """
         try:
             cursor = self.conn.cursor()
