@@ -11,15 +11,14 @@ from functions.tools import (
     message,
     create_folder,
 )
-from functions import (
-    LoginUI,
-    FaceRegisterUI,
-    Page1,
-)
+from functions import LoginUI, FaceRegisterUI, MainThread, FaceListUI
 from PyQt5 import QtCore
 from PyQt5.QtCore import QPropertyAnimation
 from PyQt5.QtWidgets import QAction
 from database.login_db import LoginDB
+from multiprocessing import Queue
+import cv2
+import threading
 
 DATA_DIR = "DATA"
 
@@ -30,12 +29,14 @@ class Ui(QtWidgets.QMainWindow):
         uic.loadUi("ui/main.ui", self)
         self.menu_frames = [
             self.frame_login,
-            self.frame_page_1,
+            self.frame_main,
             self.frame_face_register,
         ]
+        self.face_queue = Queue()
+        self.status = True
         self.data_dir = DATA_DIR
-        self.menu_btns = [self.bn_login, self.bn_page_1, self.bn_face_register]
-        self.menu_names = ["Login", "Page 1", "Page 2"]
+        self.menu_btns = [self.bn_login, self.bn_main, self.bn_face_register]
+        self.menu_names = ["Login", "Main", "Face Register"]
         self.show()
         self.first_init()
 
@@ -47,13 +48,14 @@ class Ui(QtWidgets.QMainWindow):
 
     def create_event(self):
         self.bn_login.clicked.connect(self.show_login)
-        self.bn_page_1.clicked.connect(self.show_page_1)
+        self.bn_main.clicked.connect(self.show_page_main)
         self.bn_face_register.clicked.connect(self.show_face_register)
         self.toodle.clicked.connect(self.toodle_menu)
         self.page_login_ui.message_signal.connect(message)
         self.page_login_ui.login_success_signal.connect(self.login_success)
         self.page_login_ui.logout_success_signal.connect(self.logout_success)
         self.face_register_ui.message_signal.connect(message)
+        self.main_th.add_face_item_signal.connect(self.add_face_item)
 
     def first_init(self):
         self.status = True
@@ -74,14 +76,27 @@ class Ui(QtWidgets.QMainWindow):
         self.frame_login.show()
         hide_text_button(self.menu_btns)
         self.create_event()
+
         self.showMaximized()
         quit = QAction("Quit", self)
         quit.triggered.connect(self.closeEvent)
 
+    def push_sample_thread(self):
+        image = cv2.imread("ui/images/unknow.png")
+        name = "test"
+        score = 0.85
+        for i in range(25):
+            self.face_queue.put((image, name, score))
+            threading.Event().wait(2)
+
     def init_ui(self):
         self.cb_remember_login.setChecked(True)
+        self.face_ui = FaceListUI()
         self.page_login_ui = LoginUI(self.page_login, self)
-        self.page_1_ui = Page1(self.page_1, self)
+        self.main_th = MainThread(
+            self.page_main, self, self.face_ui, self.face_queue, self.status
+        )
+        self.main_th.start()
         self.face_register_ui = FaceRegisterUI(self.page_face_register, self)
 
     def login_success(self):
@@ -110,16 +125,16 @@ class Ui(QtWidgets.QMainWindow):
         self.frame_login.setEnabled(False)
         self.stackedWidget.setCurrentWidget(self.page_login)
 
-    def show_page_1(self):
+    def show_page_main(self):
         if self.current_index == 1:
             return
         self.clear_page()
         self.current_index = 1
         reset_menu(self.menu_frames)
-        change_frame_style(self.frame_page_1)
-        self.page_1_ui.init()
-        self.frame_page_1.setEnabled(False)
-        self.stackedWidget.setCurrentWidget(self.page_1)
+        change_frame_style(self.frame_main)
+        self.main_th.init()
+        self.frame_main.setEnabled(False)
+        self.stackedWidget.setCurrentWidget(self.page_main)
 
     def show_face_register(self):
         if self.current_index == 2:
@@ -131,6 +146,9 @@ class Ui(QtWidgets.QMainWindow):
         self.face_register_ui.init()
         self.frame_face_register.setEnabled(False)
         self.stackedWidget.setCurrentWidget(self.page_face_register)
+
+    def add_face_item(self, face_image, name, score):
+        self.face_ui.add_face_item(face_image, name, score)
 
     def toodle_menu(self):
         max_width = 160
@@ -153,6 +171,7 @@ class Ui(QtWidgets.QMainWindow):
         self.animation.start()
 
     def closeEvent(self, event):
+        self.status = False
         event.accept()
 
     def clear_page(self):
