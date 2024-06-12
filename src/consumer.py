@@ -67,14 +67,15 @@ class MongoConsumer:
             data = {
                 "image": image_2,
                 "name": face_data[1],
-                "score": 1.0,
-                "timestamp": time_stamp,
+                "score": float(1.0),
+                "timestamp": int(time_stamp),
                 "camera_name": camera_name,
             }
             try:
                 response = requests.post(self.hook_url, json=data)
                 print("Hook response:", response.text)
             except Exception as e:
+                print("Hook error:", e)
                 pass
         return True
 

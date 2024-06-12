@@ -18,9 +18,17 @@ def create_face_item(face_item: FaceItem):
     global face_queue
     try:
         image = base64_to_cv2(face_item.image)
-        face_queue.put((image, face_item.name, face_item.score))
+        face_queue.put(
+            (
+                image,
+                face_item.name,
+                face_item.score,
+                face_item.timestamp,
+                face_item.camera_name,
+            )
+        )
     except Exception as e:
-        pass
+        print(e)
     return {"code": 200, "message": "Success"}
 
 

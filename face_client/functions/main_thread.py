@@ -4,12 +4,13 @@ from .face_list_ui import FaceListUI
 from .tools import base64_to_cv2
 from PyQt5.QtCore import pyqtSignal as Signal
 import numpy as np
+from datetime import datetime
 
 import time
 
 
 class MainThread(QThread):
-    add_face_item_signal = Signal(np.ndarray, str, float)
+    add_face_item_signal = Signal(np.ndarray, str, float, str, str)
 
     def __init__(self, parent, ui, face_ui, face_queue, status):
         QThread.__init__(self, parent)
@@ -41,8 +42,11 @@ class MainThread(QThread):
     def add_face_item(self, face):
         # base64_face, name, score = face
         # image_face = base64_to_cv2(base64_face)
-        image_face, name, score = face
-        self.add_face_item_signal.emit(image_face, name, score)
+        image_face, name, score, timestamp, camera_name = face
+        dt_object = datetime.fromtimestamp(timestamp)
+        time_str = dt_object.strftime("%H:%M:%S")
+
+        self.add_face_item_signal.emit(image_face, name, score, time_str, camera_name)
 
     def run(self):
 

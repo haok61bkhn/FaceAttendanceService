@@ -184,8 +184,8 @@ class MainUi(QtWidgets.QMainWindow):
         self.frame_camera.setEnabled(False)
         self.stackedWidget.setCurrentWidget(self.page_camera)
 
-    def add_face_item(self, face_image, name, score):
-        self.face_ui.add_face_item(face_image, name, score)
+    def add_face_item(self, face_image, name, score, time_str, camera_name):
+        self.face_ui.add_face_item(face_image, name, score, time_str, camera_name)
 
     def toodle_menu(self):
         max_width = 160

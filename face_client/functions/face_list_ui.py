@@ -38,7 +38,7 @@ class FaceListUI(QWidget):
         self.setLayout(main_layout)
         self.setStyleSheet("background-color: #f7f7f7; padding: 10px;")
 
-    def add_face_item(self, image=None, name="John Doe", score=95):
+    def add_face_item(self, image, name, score, time_str, camera_name):
         if image is not None:
             current_count = self.container_layout.count()
             if current_count >= self.max_columns * self.max_rows:
@@ -55,7 +55,7 @@ class FaceListUI(QWidget):
             col = current_count % self.max_columns
 
             # Create and add new FaceItemUI to the grid
-            face_item = FaceItemUI(image, name, score)
+            face_item = FaceItemUI(image, name, score, time_str, camera_name)
             self.container_layout.addWidget(face_item, row, col)
 
 

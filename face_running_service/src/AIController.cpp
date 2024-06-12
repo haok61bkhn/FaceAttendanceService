@@ -86,7 +86,7 @@ void AIController::ProcessUpdatingDataThread() {
         if (ident_trackers.find(id) == ident_trackers.end()) {
           ident_trackers[id] = 0;
         }
-        if (time_stamp - ident_trackers[id] > 15) {
+        if (time_stamp - ident_trackers[id] > 5) {
           ident_trackers[id] = time_stamp;
           auto& object_image = object_updating.object_image;
           auto& object_image_full = object_updating.object_image_full;

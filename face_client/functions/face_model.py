@@ -6,4 +6,4 @@ class FaceItem(BaseModel):
     image: str
     score: float
     timestamp: int
-    camera_name: int
+    camera_name: str

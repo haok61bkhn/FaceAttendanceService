@@ -6,11 +6,13 @@ from PyQt5.QtWidgets import QFrame
 
 
 class FaceItemUI(QWidget):
-    def __init__(self, image, name, score, parent=None):
+    def __init__(self, image, name, score, time_str, camera_name, parent=None):
         super(FaceItemUI, self).__init__(parent)
         self.image = image
         self.name = name
         self.score = score
+        self.time_str = time_str
+        self.camera_name = camera_name
 
         self.initUI()
 
@@ -70,6 +72,36 @@ class FaceItemUI(QWidget):
         )
         frame_layout.addWidget(score_label)
 
+        # Display Time
+        time_label = QLabel(self)
+        time_label.setText(f"Time: {self.time_str}")
+        time_label.setAlignment(Qt.AlignCenter)
+        time_label.setStyleSheet(
+            """
+            QLabel {
+                font-size: 14px;
+                color: #555;
+                margin-top: 2px;
+            }
+        """
+        )
+        frame_layout.addWidget(time_label)
+
+        # Display Camera Name
+        camera_label = QLabel(self)
+        camera_label.setText(f"Camera: {self.camera_name}")
+        camera_label.setAlignment(Qt.AlignCenter)
+        camera_label.setStyleSheet(
+            """
+            QLabel {
+                font-size: 14px;
+                color: #555;
+                margin-top: 2px;
+            }
+        """
+        )
+        frame_layout.addWidget(camera_label)
+
         layout.addWidget(frame, alignment=Qt.AlignCenter)
 
         self.setLayout(layout)
@@ -82,7 +114,7 @@ class FaceItemUI(QWidget):
             }
         """
         )
-        self.setFixedSize(240, 310)
+        self.setFixedSize(240, 410)
 
     def get_pixmap(self, image):
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
