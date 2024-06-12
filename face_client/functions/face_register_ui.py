@@ -1,5 +1,11 @@
 from PyQt5 import QtWidgets
-from .tools import open_files_dialog, register_face, get_faces, base64_to_cv2
+from .tools import (
+    open_files_dialog,
+    register_face,
+    get_faces,
+    base64_to_cv2,
+    remove_face,
+)
 from PyQt5.QtCore import pyqtSignal as Signal
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
@@ -26,6 +32,7 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
         self.ui.bn_clear.clicked.connect(self.clear)
         self.ui.bn_get_faces.clicked.connect(self.get_face_list)
         self.ui.tb_faces.clicked.connect(self.select_row_event)
+        self.ui.bn_remove_user.clicked.connect(self.remove_face_event)
 
     def first_init(self):
         self.register_images = [
@@ -57,6 +64,7 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
 
     def init(self):
         self.clear()
+        self.ui.bn_remove_user.setEnabled(False)
 
     def clear(self):
         self.clear_register_text()
@@ -137,9 +145,11 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
             self.model.appendRow(row)
 
     def select_row_event(self):
+
         selected = self.ui.tb_faces.selectedIndexes()
         if len(selected) == 0:
             return
+        self.ui.bn_remove_user.setEnabled(True)
         row = selected[0].row()
         image1 = self.faces[row]["image1"]
         if image1 != "":
@@ -154,3 +164,18 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
             # set scaled content keeps the aspect ratio of the image
             self.ui.lb_image_face.setScaledContents(True)
             self.ui.lb_image_face.setPixmap(QPixmap.fromImage(image1_qt))
+
+    def remove_face_event(self):
+        selected = self.ui.tb_faces.selectedIndexes()
+        if len(selected) == 0:
+            return
+        row = selected[0].row()
+        face_id = self.faces[row]["faceId"]
+        status, message = remove_face(face_id, self.ui.token, self.ui.ip)
+        if not status:
+            self.message_signal.emit("Thất bại", message)
+        else:
+            self.message_signal.emit("Thành công", message)
+            self.get_face_list()
+            self.clear_select_image()
+            self.ui.bn_remove_user.setEnabled(False)

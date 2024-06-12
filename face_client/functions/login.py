@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets
-from .tools import login
+from .tools import login, set_hook_url
 from PyQt5.QtCore import pyqtSignal as Signal
 
 
@@ -41,7 +41,6 @@ class LoginUI(QtWidgets.QTabWidget):
         self.ui.password = password
         self.ui.ip = ip
         if is_admin:
-
             self.message_signal.emit("Thành công", "Đăng nhập thành công admin")
             self.ui.lab_user.setText("Admin")
             self.ui.is_admin = True

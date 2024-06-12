@@ -10,8 +10,9 @@ from functions.tools import (
     show_text_button,
     message,
     create_folder,
+    set_hook_url,
 )
-from functions import LoginUI, FaceRegisterUI, MainThread, FaceListUI
+from functions import LoginUI, FaceRegisterUI, MainThread, FaceListUI, CameraUI
 from PyQt5 import QtCore
 from PyQt5.QtCore import QPropertyAnimation
 from PyQt5.QtWidgets import QAction
@@ -31,12 +32,18 @@ class MainUi(QtWidgets.QMainWindow):
             self.frame_login,
             self.frame_main,
             self.frame_face_register,
+            self.frame_camera,
         ]
         self.face_queue = face_queue
         self.status = True
         self.data_dir = DATA_DIR
-        self.menu_btns = [self.bn_login, self.bn_main, self.bn_face_register]
-        self.menu_names = ["Login", "Main", "Face Register"]
+        self.menu_btns = [
+            self.bn_login,
+            self.bn_main,
+            self.bn_face_register,
+            self.bn_camera,
+        ]
+        self.menu_names = ["Đăng nhập", "Điểm danh", "Đăng ký khuôn mặt", "Camera"]
         self.show()
         self.first_init()
 
@@ -50,15 +57,20 @@ class MainUi(QtWidgets.QMainWindow):
         self.bn_login.clicked.connect(self.show_login)
         self.bn_main.clicked.connect(self.show_page_main)
         self.bn_face_register.clicked.connect(self.show_face_register)
+        self.bn_camera.clicked.connect(self.show_camera)
         self.toodle.clicked.connect(self.toodle_menu)
+        self.bn_set_hook.clicked.connect(self.set_hook)
         self.page_login_ui.message_signal.connect(message)
         self.page_login_ui.login_success_signal.connect(self.login_success)
         self.page_login_ui.logout_success_signal.connect(self.logout_success)
         self.face_register_ui.message_signal.connect(message)
         self.main_th.add_face_item_signal.connect(self.add_face_item)
+        self.camera_ui.message_signal.connect(message)
 
     def first_init(self):
         self.status = True
+        self.ip = ""
+        self.token = ""
         self.init_folder()
         self.init_db()
         self.init_ui()
@@ -68,6 +80,7 @@ class MainUi(QtWidgets.QMainWindow):
             self.bt_username.setText(login_infor[2])
             self.bt_password.setText(login_infor[3])
             self.bt_ip.setText(login_infor[1])
+            self.bt_hook_url.setText(login_infor[4])
         self.stackedWidget.setCurrentWidget(self.page_login)
         self.current_index = 0
         self.show_login()
@@ -98,6 +111,7 @@ class MainUi(QtWidgets.QMainWindow):
         )
         self.main_th.start()
         self.face_register_ui = FaceRegisterUI(self.page_face_register, self)
+        self.camera_ui = CameraUI(self.page_camera, self)
 
     def login_success(self):
         for fr in self.menu_frames:
@@ -106,6 +120,9 @@ class MainUi(QtWidgets.QMainWindow):
             self.login_db.save_login_infor(
                 self.bt_ip.text(), self.bt_username.text(), self.bt_password.text()
             )
+            hook_url = self.bt_hook_url.text()
+            if hook_url:
+                self.login_db.insert_hook_url(hook_url)
         else:
             self.login_db.delete_login_infor()
 
@@ -114,6 +131,15 @@ class MainUi(QtWidgets.QMainWindow):
             fr.hide()
         self.frame_login.show()
         self.show_login()
+
+    def set_hook(self):
+        hook_url = self.bt_hook_url.text()
+        status, message_str = set_hook_url(hook_url, self.ip, self.token)
+        if status:
+            self.login_db.insert_hook_url(hook_url)
+            message("Thành công", "Thiết lập hook thành công")
+        else:
+            message("Thất bại", message_str)
 
     def show_login(self):
         if self.current_index == 0:
@@ -147,6 +173,17 @@ class MainUi(QtWidgets.QMainWindow):
         self.frame_face_register.setEnabled(False)
         self.stackedWidget.setCurrentWidget(self.page_face_register)
 
+    def show_camera(self):
+        if self.current_index == 3:
+            return
+        self.clear_page()
+        self.current_index = 3
+        reset_menu(self.menu_frames)
+        change_frame_style(self.frame_camera)
+        self.camera_ui.init()
+        self.frame_camera.setEnabled(False)
+        self.stackedWidget.setCurrentWidget(self.page_camera)
+
     def add_face_item(self, face_image, name, score):
         self.face_ui.add_face_item(face_image, name, score)
 
@@ -179,3 +216,5 @@ class MainUi(QtWidgets.QMainWindow):
             self.main_th.clear()
         elif self.current_index == 2:
             self.face_register_ui.clear()
+        elif self.current_index == 3:
+            self.camera_ui.clear()

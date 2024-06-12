@@ -38,6 +38,34 @@ def login(username, password, ip):
         return False, False, None
 
 
+def set_hook_url(hook_url, ip, token):
+    try:
+        url = ip + "/hook"
+        headers = {"Authorization": "Bearer " + token}
+        response = requests.post(url, json={"url": hook_url}, headers=headers)
+        if response.status_code == 200:
+            return True, "Thành công"
+        else:
+            return False, "Lỗi server"
+    except Exception as e:
+        print(e)
+        return False, str(e)
+
+
+def remove_face(face_id, token, ip):
+    try:
+        url = ip + "/faces/" + face_id
+        headers = {"Authorization": "Bearer " + token}
+        response = requests.delete(url, headers=headers)
+        if response.status_code == 200:
+            return True, "Xóa thành công"
+        else:
+            return False, "Lỗi server"
+    except Exception as e:
+        print(e)
+        return False, str(e)
+
+
 def register_face(face_id, name, image_paths, token, ip):
     try:
         url = ip + "/faces"
@@ -80,6 +108,49 @@ def get_faces(token, ip):
     except Exception as e:
         print(e)
         return []
+
+
+def get_cameras(token, ip):
+    try:
+        url = ip + "/camera"
+        headers = {"Authorization": "Bearer " + token}
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            return response.json()["data"]["cameras"]
+        else:
+            return []
+    except Exception as e:
+        print(e)
+        return []
+
+
+def insert_camera(camera_url, camera_name, ip, token):
+    try:
+        url = ip + "/camera"
+        headers = {"Authorization": "Bearer " + token}
+        data = {"url": camera_url, "name": camera_name}
+        response = requests.post(url, json=data, headers=headers)
+        if response.status_code == 200:
+            return True, "Thêm camera thành công"
+        else:
+            return False, "Lỗi server"
+    except Exception as e:
+        print(e)
+        return False, str(e)
+
+
+def remove_camera(camera_id, ip, token):
+    try:
+        url = ip + "/camera/" + camera_id
+        headers = {"Authorization": "Bearer " + token}
+        response = requests.delete(url, headers=headers)
+        if response.status_code == 200:
+            return True, "Xóa camera thành công"
+        else:
+            return False, "Lỗi server"
+    except Exception as e:
+        print(e)
+        return False, str(e)
 
 
 def create_folder(folder):

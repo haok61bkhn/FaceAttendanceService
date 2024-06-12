@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(993, 926)
+        MainWindow.resize(1400, 926)
         MainWindow.setMinimumSize(QtCore.QSize(800, 550))
         MainWindow.setToolButtonStyle(QtCore.Qt.ToolButtonTextOnly)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -145,7 +145,7 @@ class Ui_MainWindow(object):
         self.frame_bottom_west.setObjectName("frame_bottom_west")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frame_bottom_west)
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_3.setSpacing(0)
+        self.verticalLayout_3.setSpacing(5)
         self.verticalLayout_3.setObject        self.frame_login.        self.frame_login = QtWidgets.QFrame(self.frame_bottom_west)
         self.frame_login.setMinimumSize(QtCore.QSize(80, 55))
         self.frame_login.setMaximumSize(QtCore.QSize(160, 55))
@@ -248,6 +248,39 @@ class Ui_MainWindow(object):
         self.bn_face_register.setObjectName("bn_face_register")
         self.horizontalLayout_17.addWidget(self.bn_face_register)
         self.verticalLayout_3.addWidget(self.frame_face_register)
+        self.frame_camera = QtWidgets.QFrame(self.frame_bottom_west)
+        self.frame_camera.setMinimumSize(QtCore.QSize(80, 55))
+        self.frame_camera.setMaximumSize(QtCore.QSize(160, 55))
+        self.frame_camera.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.frame_camera.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.frame_camera.setObjectName("frame_camera")
+        self.horizontalLayout_37 = QtWidgets.QHBoxLayout(self.frame_camera)
+        self.horizontalLayout_37.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_37.setSpacing(0)
+        self.horizontalLayout_37.setObjectName("horizontalLayout_37")
+        self.bn_camera = QtWidgets.QPushButton(self.frame_camera)
+        self.bn_camera.setMinimumSize(QtCore.QSize(80, 55))
+        self.bn_camera.setMaximumSize(QtCore.QSize(160, 55))
+        self.bn_camera.setStyleSheet("QPushButton {\n"
+"    border: none;\n"
+"    background-color: rgba(0,0,0,0);\n"
+"color: white;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(91,90,90);\n"
+"}\n"
+"QPushButton:pressed {    \n"
+"    background-color: rgba(0,0,0,0);\n"
+"}\n"
+"")
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap("/home/haobk/Desktop/Mydata/FaceService/face_client/ui/icons/custom/run_icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bn_camera.setIcon(icon4)
+        self.bn_camera.setIconSize(QtCore.QSize(30, 30))
+        self.bn_camera.setFlat(True)
+        self.bn_camera.setObjectName("bn_camera")
+        self.horizontalLayout_37.addWidget(self.bn_camera)
+        self.verticalLayout_3.addWidget(self.frame_camera)
         self.frame_8 = QtWidgets.QFrame(self.frame_bottom_west)
         self.frame_8.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_8.setFrameShadow(QtWidgets.QFrame.Plain)
@@ -305,7 +338,8 @@ class Ui_MainWindow(object):
 "}")
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
-        self.horizontalLa        self.wget_login = QtWi        self.verticalLayout_18.addWidget(self.wget_title_home)
+        self.horizontalLayout_36.addWidget(self.label)
+        self.verticalLayout_18.addWidget(self.wget_title_home)
         self.wget_login = QtWidgets.QWidget(self.page_login)
         self.wget_login.setObjectName("wget_login")
         self.gridLayout = QtWidgets.QGridLayout(self.wget_login)
@@ -423,9 +457,9 @@ class Ui_MainWindow(object):
         self.bt_hook_url = QtWidgets.QLineEdit(self.widget_14)
         self.bt_hook_url.setObjectName("bt_hook_url")
         self.horizontalLayout_30.addWidget(self.bt_hook_url)
-        self.bt_set_hook = QtWidgets.QPushButton(self.widget_14)
-        self.bt_set_hook.setObjectName("bt_set_hook")
-        self.horizontalLayout_30.addWidget(self.bt_set_hook)
+        self.bn_set_hook = QtWidgets.QPushButton(self.widget_14)
+        self.bn_set_hook.setObjectName("bn_set_hook")
+        self.horizontalLayout_30.addWidget(self.bn_set_hook)
         self.verticalLayout_19.addWidget(self.widget_14)
         self.frame_12 = QtWidgets.QFrame(self.widget_5)
         self.frame_12.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -435,8 +469,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_10.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_10.setSpacing(0)
         self.horizontalLayout_10.setObjectName("horizontalLayout_10")
-        self.cb_remember_login = QtWidgets.QCheckBox(self.frame_12)
-        self.cb_remember_login.setObjectName("cb_remember_login")
+        self.cb_remember_login = QtWidget        self.horizontalLayo        self.cb_remember_login.setObjectName("cb_remember_login")
         self.horizontalLayout_10.addWidget(self.cb_remember_login, 0, QtCore.Qt.AlignRight)
         self.verticalLayout_19.addWidget(self.frame_12)
         self.gridLayout.addWidget(self.widget_5, 0, 0, 1, 1, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
@@ -451,9 +484,9 @@ class Ui_MainWindow(object):
         self.page_face_register = QtWidgets.QWidget()
         self.page_face_register.setObjectName("page_face_register")
         self.horizontalLayout_117 = QtWidgets.QHBoxLayout(self.page_face_register)
-        self.horizontalLayout_117.setObjectName("h        self.wg_page_main.setStyleSheet("/* Main Window */\n"
-"QMainWindow {\n"
-"    backgrou        self.wg_page_main.setStyleSheet("/* Main Window */\n"
+        self.horizontalLayout_117.setObjectName("horizontalLayout_117")
+        self.wg_page_main = QtWidgets.QWidget(self.page_face_register)
+        self.wg_page_main.setStyleSheet("/* Main Window */\n"
 "QMainWindow {\n"
 "    background-color: #2E3440;\n"
 "    color: #ECEFF4;\n"
@@ -626,8 +659,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_23.setObjectName("horizontalLayout_23")
         self.lb_image_4 = QtWidgets.QLabel(self.frame_image_4)
         self.lb_image_4.setObjectName("lb_image_4")
-        self.horizontalLayout_23.addWidget(self.lb_image_4)
-        self.horizontalLayout_18.addWidget(self.frame_image_4)
+        self.horizontalLayout_        self.verticalLayout_6.        self.horizontalLayout_18.addWidget(self.frame_image_4)
         self.verticalLayout_6.addWidget(self.frame_5)
         self.verticalLayout_5.addWidget(self.frame_register_image)
         self.frame_3 = QtWidgets.QFrame(self.frame_register)
@@ -644,8 +676,9 @@ class Ui_MainWindow(object):
         self.frame_7.setObjectName("frame_7")
         self.horizontalLayout_20 = QtWidgets.QHBoxLayout(self.frame_7)
         self.horizontalLayout_20.setObjectName("horizontalLayout_20")
-        self.label_        self.label_2.setObjectName("label_2")
-        self.horizontalLayout_20.addWidget(self        self.label_2.setObjectName("label_2")
+        self.label_2 = QtWidgets.QLabel(self.frame_7)
+        self.label_2.setMinimumSize(QtCore.QSize(100, 0))
+        self.label_2.setObjectName("label_2")
         self.horizontalLayout_20.addWidget(self.label_2, 0, QtCore.Qt.AlignHCenter)
         self.bt_name = QtWidgets.QLineEdit(self.frame_7)
         self.bt_name.setMinimumSize(QtCore.QSize(200, 0))
@@ -725,7 +758,11 @@ class Ui_MainWindow(object):
         self.frame_11.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_11.setObjectName("frame_11")
         self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.frame_11)
+        self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_10.setObjectName("verticalLayout_10")
+        self.bn_remove_user = QtWidgets.QPushButton(self.frame_11)
+        self.bn_remove_user.setObjectName("bn_remove_user")
+        self.verticalLayout_10.addWidget(self.bn_remove_user, 0, QtCore.Qt.AlignRight)
         self.tb_faces = QtWidgets.QTableView(self.frame_11)
         self.tb_faces.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.tb_faces.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -739,6 +776,194 @@ class Ui_MainWindow(object):
         self.horizontalLayout_7.addWidget(self.frame_face_data)
         self.horizontalLayout_117.addWidget(self.wg_page_main)
         self.stackedWidget.addWidget(self.page_face_register)
+        self.page_camera = QtWidgets.QWidget()
+        self.page_camera.setObjectName("page_camera")
+        self.horizontalLayout_46 = QtWidgets.QHBoxLayout(self.page_camera)
+        self.horizontalLayout_46.setObjectN        self.wg_page_main_2.setStyleSheet("/* Main Window */\n"
+"QMainWindow {\n"
+"    backgr        self.wg_page_main_2.setStyleSheet("/* Main Window */\n"
+"QMainWindow {\n"
+"    background-color: #2E3440;\n"
+"    color: #ECEFF4;\n"
+"    font-family: \'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif;\n"
+"    font-size: 12pt;\n"
+"}\n"
+"\n"
+"/* Labels */\n"
+"QLabel {\n"
+"    color: #ECEFF4;\n"
+"    font-size: 12pt;\n"
+"    padding: 5px;\n"
+"}\n"
+"\n"
+"/* Table View */\n"
+"QTableView {\n"
+"    background-color: #3B4252;\n"
+"    color: #ECEFF4;\n"
+"    gridline-color: #4C566A;\n"
+"    border: 1px solid #4C566A;\n"
+"}\n"
+"\n"
+"QHeaderView::section {\n"
+"    background-color: #4C566A;\n"
+"    color: #ECEFF4;\n"
+"    padding: 5px;\n"
+"    border: 1px solid #4C566A;\n"
+"}\n"
+"\n"
+"QTableView::item {\n"
+"    background-color: #3B4252;\n"
+"    color: #ECEFF4;\n"
+"    border: 1px solid #4C566A;\n"
+"}\n"
+"\n"
+"QTableView::item:selected {\n"
+"    background-color: #5E81AC;\n"
+"    color: #ECEFF4;\n"
+"}\n"
+"\n"
+"/* Buttons */\n"
+"QPushButton {\n"
+"    background-color: #5E81AC;\n"
+"    color: #ECEFF4;\n"
+"    border: 1px solid #4C566A;\n"
+"    padding: 10px;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #81A1C1;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #4C566A;\n"
+"}\n"
+"\n"
+"/* Line Edit */\n"
+"QLineEdit {\n"
+"    background-color: #3B4252;\n"
+"    color: #ECEFF4;\n"
+"    border: 1px solid #4C566A;\n"
+"    padding: 5px;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
+"/* Combo Box */\n"
+"QComboBox {\n"
+"    background-color: #3B4252;\n"
+"    color: #ECEFF4;\n"
+"    border: 1px solid #4C566A;\n"
+"    padding: 5px;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView {\n"
+"    background-color: #3B4252;\n"
+"    color: #ECEFF4;\n"
+"    border: 1px solid #4C566A;\n"
+"    selection-background-color: #5E81AC;\n"
+"}\n"
+"\n"
+"/* Group Box */\n"
+"QGroupBox {\n"
+"    background-color: #3B4252;\n"
+"    color: #ECEFF4;\n"
+"    border: 1px solid #4C566A;\n"
+"    border-radius: 5px;\n"
+"    margin-top: 10px;\n"
+"    padding: 10px;\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    background-color: transparent;\n"
+"    subcontrol-origin: margin;\n"
+"    subcontrol-position: top center;\n"
+"    padding: 0 5px;\n"
+"}\n"
+"")
+        self.wg_page_main_2.setObjectName("wg_page_main_2")
+        self.horizontalLayout_32 = QtWidgets.QHBoxLayout(self.wg_page_main_2)
+        self.horizontalLayout_32.setObjectName("horizontalLayout_32")
+        self.frame_face_data_2 = QtWidgets.QFrame(self.wg_page_main_2)
+        self.frame_face_data_2.setMaximumSize(QtCore.QSize(500, 16777215))
+        self.frame_face_data_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_face_data_2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_face_data_2.setObjectName("frame_face_data_2")
+        self.verticalLayout_14 = QtWidgets.QVBoxLayout(self.frame_face_data_2)
+        self.verticalLayout_14.setContentsMargins(2, 2, 2, 2)
+        self.verticalLayout_14.setSpacing(10)
+        self.verticalLayout_14.setObjectName("verticalLayout_14")
+        self.frame_20 = QtWidgets.QFrame(self.frame_face_data_2)
+        self.frame_20.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_20.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_20.setObjectName("frame_20")
+        self.verticalLayout_16 = QtWidgets.QVBoxLayout(self.frame_20)
+        self.verticalLayout_16.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_16.setObjectName("verticalLayout_16")
+        self.bn_remove_camera = QtWidgets.QPushButton(self.frame_20)
+        self.bn_remove_camera.setObjectName("bn_remove_camera")
+        self.verticalLayout_16.addWidget(self.bn_remove_camera, 0, QtCore.Qt.AlignRight)
+        self.tb_camera = QtWidgets.QTableView(self.frame_20)
+        self.tb_camera.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.tb_camera.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.tb_camera.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.tb_camera.setObjectName("tb_camera")
+        self.verticalLayout_16.addWidget(self.tb_camera)
+        self.bn_get_camera = QtWidgets.QPushButton(self.frame_20)
+        self.bn_get_camera.setObjectName("bn_get_camera")
+        self.verticalLayout_16.addWidget(self.bn_get_camera)
+        self.verticalLayout_14.addWidget(self.frame_20)
+        self.frame_2 = QtWidgets.QFrame(self.frame_face_data_2)
+        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_2.setObjectName("frame_2")
+        self.verticalLayout_11 = QtWidgets.QVBoxLayout(self.frame_2)
+        self.verticalLayout_11.setContentsMargins(2, 2, 2, 2)
+        self.verticalLayout_11.setObjectName("verticalLayout_11")
+        self.frame_13 = QtWidgets.QFrame(self.frame_2)
+        self.frame_13.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_13.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_13.setObjectName("frame_13")
+        self.horizontalLayout_33 = QtWidgets.QHBoxLayout(self.frame_13)
+        self.horizontalLayout_33.setContentsMargins(-1, 9, -1, 9)
+        self.horizontalLayout_33.setObjectName("horizontalLayout_33")
+        self.label_4 = QtWidgets.QLabel(self.frame_13)
+        self.label_4.setMinimumSize(QtCore.QSize(150, 0))
+        self.label_4.setObjectName("label_4")
+        self.horizontalLayout_33.addWidget(self.label_4)
+        self.bt_camera_name = QtWidgets.QLineEdit(self.frame_13)
+        self.bt_camera_name.setObjectName("bt_camera_name")
+        self.horizontalLayout_33.addWidget(self.bt_camera_name)
+        self.verticalLayout_11.addWidget(self.frame_13)
+        self.frame_14 = QtWidgets.QFrame(self.frame_2)
+        self.frame_14.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_14.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_14.setObjectName("frame_14")
+        self.horizontalLayout_34 = QtWidgets.QHBoxLayout(self.frame_14)
+        self.horizontalLayout_34.setContentsMargins(-1, 9, -1, 9)
+        self.horizontalLayout_34.setObjectName("horizontalLayout_34")
+        self.label_5 = QtWidgets.QLabel(self.frame_14)
+        self.label_5.setMinimumSize(QtCore.QSize(150, 0))
+        self.label_5.setObjectName("label_5")
+        self.horizontalLayout_34.addWidget(self.label_5)
+        self.bt_camera_ip = QtWidgets.QLineEdit(self.frame_14)
+        self.bt_camera_ip.setObjectName("bt_camera_ip")
+        self.horizontalLayout_34.addWidget(self.bt_camera_ip)
+        self.verticalLayout_11.addWidget(self.frame_14)
+        self.frame_15 = QtWidgets.QFrame(self.frame_2)
+        self.frame_15.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_15.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_15.setObjectName("frame_15")
+        self.verticalLayout_12 = QtWidgets.QVBoxLayout(self.frame_15)
+        self.verticalLayout_12.setObjectName("verticalLayout_12")
+        self.bn_add_camera = QtWidgets.QPushButton(self.frame_15)
+        self.bn_add_camera.setObjectName("bn_add_camera")
+        self.verticalLayout_12.addWidget(self.bn_add_camera)
+        self.verticalLayout_11.addWidget(self.frame_15)
+        self.verticalLayout_14.addWidget(self.frame_2)
+        self.horizontalLayout_32.addWidget(self.frame_face_data_2)
+        self.horizontalLayout_46.addWidget(self.wg_page_main_2)
+        self.stackedWidget.addWidget(self.page_camera)
         self.horizontalLayout_14.addWidget(self.stackedWidget)
         self.verticalLayout_2.addWidget(self.frame)
         self.frame_low = QtWidgets.QFrame(self.frame_bottom_east)
@@ -749,9 +974,8 @@ class Ui_MainWindow(object):
         self.frame_low.setFrameShadow(QtWidgets.QFrame.Plain)
         self.frame_low.setObjectName("frame_low")
         self.horizontalLayout_11 = QtWidgets.QHBoxLayout(self.frame_low)
-        self.horizontalLayout_11.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_11.setSpacing(0)
-        self.horizontalLayout_11.setObjectName("horizontalLayout_11")
+        self.horiz        self.horizontalLayout_11.setObjectName("horizontalLayout_11")
+        self.frame_tab         self.horizontalLayout_11.setObjectName("horizontalLayout_11")
         self.frame_tab = QtWidgets.QFrame(self.frame_low)
         font = QtGui.QFont()
         font.setFamily("Segoe UI")
@@ -779,8 +1003,9 @@ class Ui_MainWindow(object):
         self.frame_drag.setStyleSheet("background:rgb(51,51,51);")
         self.frame_drag.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame_drag.setFrameShadow(QtWidgets.QFrame.Plain)
-        self.frame_drag.setObject        self.horizontalLayout_13.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout        self.horizontalLayout_13.setContentsMargins(0, 0, 0, 0)
+        self.frame_drag.setObjectName("frame_drag")
+        self.horizontalLayout_13 = QtWidgets.QHBoxLayout(self.frame_drag)
+        self.horizontalLayout_13.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_13.setSpacing(0)
         self.horizontalLayout_13.setObjectName("horizontalLayout_13")
         self.horizontalLayout_11.addWidget(self.frame_drag)
@@ -790,7 +1015,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(3)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -804,6 +1029,8 @@ class Ui_MainWindow(object):
         self.bn_main.setText(_translate("MainWindow", "Điểm danh"))
         self.bn_face_register.setToolTip(_translate("MainWindow", "Cloud"))
         self.bn_face_register.setText(_translate("MainWindow", "Đăng kí khuôn mặt"))
+        self.bn_camera.setToolTip(_translate("MainWindow", "Cloud"))
+        self.bn_camera.setText(_translate("MainWindow", "Quản lý camera"))
         self.label.setText(_translate("MainWindow", "ĐĂNG NHẬP "))
         self.label_39.setText(_translate("MainWindow", "Địa chỉ IP"))
         self.label_35.setText(_translate("MainWindow", "Tên đăng nhập"))
@@ -811,7 +1038,7 @@ class Ui_MainWindow(object):
         self.bt_login.setText(_translate("MainWindow", "Đăng nhập"))
         self.bt_logout.setText(_translate("MainWindow", "Đăng xuất"))
         self.label_38.setText(_translate("MainWindow", "HOOK URL"))
-        self.bt_set_hook.setText(_translate("MainWindow", "Set"))
+        self.bn_set_hook.setText(_translate("MainWindow", "Set"))
         self.cb_remember_login.setText(_translate("MainWindow", "Nhớ thông tin"))
         self.lb_image_1.setText(_translate("MainWindow", "image_1"))
         self.lb_image_2.setText(_translate("MainWindow", "image_2"))
@@ -824,6 +1051,12 @@ class Ui_MainWindow(object):
         self.bn_open_images.setText(_translate("MainWindow", "Chọn ảnh"))
         self.bn_register.setText(_translate("MainWindow", "Đăng ký"))
         self.lb_image_face.setText(_translate("MainWindow", "image"))
+        self.bn_remove_user.setText(_translate("MainWindow", "Xóa user"))
         self.bn_get_faces.setText(_translate("MainWindow", "Làm mới"))
+        self.bn_remove_camera.setText(_translate("MainWindow", "Xóa camera"))
+        self.bn_get_camera.setText(_translate("MainWindow", "Làm mới"))
+        self.label_4.setText(_translate("MainWindow", "Tên camera"))
+        self.label_5.setText(_translate("MainWindow", "Địa chỉ camera"))
+        self.bn_add_camera.setText(_translate("MainWindow", "Thêm camera"))
         self.lab_tab.setText(_translate("MainWindow", "<html><head/><body><p><br/></p></body></html>"))
         self.frame_drag.setToolTip(_translate("MainWindow", "Drag"))

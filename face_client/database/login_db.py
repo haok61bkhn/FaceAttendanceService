@@ -23,7 +23,8 @@ class LoginDB:
                                     id integer PRIMARY KEY,
                                     ip text NOT NULL,
                                     username text NOT NULL,
-                                    password text NOT NULL
+                                    password text NOT NULL,
+                                    hook_url text
                                 );"""
         try:
             c = self.conn.cursor()
@@ -38,6 +39,20 @@ class LoginDB:
         cur.execute(sql, (ip, username, password))
         self.conn.commit()
         return cur.lastrowid
+
+    def get_hook_url(self):
+        cur = self.conn.cursor()
+        cur.execute("SELECT hook_url FROM login")
+        rows = cur.fetchall()
+        if len(rows) == 0:
+            return None
+        return rows[0][0]
+
+    def insert_hook_url(self, hook_url):
+        sql = "UPDATE login SET hook_url = ?"
+        cur = self.conn.cursor()
+        cur.execute(sql, (hook_url,))
+        self.conn.commit()
 
     def get_login_infor(self):
         cur = self.conn.cursor()

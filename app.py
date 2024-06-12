@@ -30,9 +30,10 @@ async def healthcheck():
     return {"status": "ok", "code": 200, "message": "Healthcheck", "error": False}
 
 
-@app.post("/set_hook", include_in_schema=True, response_model=CommonResponse)
+@app.post("/hook", include_in_schema=True, response_model=CommonResponse)
 async def set_hook(hook: HookInfo, current_user: User = Depends(get_current_user)):
     status = main.set_hook_url(hook.url)
+    print("hook:", hook.url, "   status:", status)
     return {
         "status": status,
         "message": "Hook url set successfully",

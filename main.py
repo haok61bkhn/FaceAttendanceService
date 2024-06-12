@@ -67,6 +67,7 @@ def set_hook_url(hook_url):
 
 def get_cameras():
     data = deepstream_manager.get_cameras()
+    print(data)
     if data is None:
         return False, "Get cameras failed", []
     else:
