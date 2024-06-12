@@ -10,9 +10,8 @@ import threading
 import requests
 
 
-file_current_dir = os.path.dirname(os.path.abspath(__file__))
-image_dir = os.path.join(file_current_dir, settings.DATA_DIR, "APP_IMAGES")
-database_dir = os.path.join(file_current_dir, settings.DATA_DIR, "APP_DATABASE")
+image_dir = os.path.join(settings.DATA_DIR, "APP_IMAGES")
+database_dir = os.path.join(settings.DATA_DIR, "APP_DATABASE")
 create_folder(settings.DATA_DIR)
 create_folder(image_dir)
 create_folder(database_dir)
