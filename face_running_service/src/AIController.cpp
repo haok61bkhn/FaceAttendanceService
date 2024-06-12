@@ -81,6 +81,7 @@ void AIController::ProcessUpdatingDataThread() {
           face_manager->Search(feature, 0.6);
       if (face_results.size() > 0) {
         auto& id = face_results[0].pid;
+        auto& score = face_results[0].score;
         std::cout << "id: " << id << std::endl;
         auto& time_stamp = object_updating.time_stamp;
         if (ident_trackers.find(id) == ident_trackers.end()) {
@@ -111,7 +112,7 @@ void AIController::ProcessUpdatingDataThread() {
 
           types::FaceAttendanceInfor face_attendance(
               id, object_image_save_path, object_image_full_save_path,
-              camera_id, camera_name, time_stamp);
+              camera_id, camera_name, time_stamp, score);
           face_attendance_db->InsertFaceAttendance(face_attendance);
         }
       }

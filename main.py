@@ -56,10 +56,15 @@ def remove_camera(camera_id):
 
 
 def set_hook_url(hook_url):
-    reponse = requests.get(hook_url + ":8001/test_hook")
+    reponse = requests.post(hook_url + ":8001/test_hook")
+    print(reponse.json())
     if reponse.status_code != 200:
         return False
+    else:
+        if not reponse.json()["status"]:
+            return False
     hook_url += ":8001/face_item"
+    print(hook_url)
     consumer.set_hook_url(hook_url)
     return True
 

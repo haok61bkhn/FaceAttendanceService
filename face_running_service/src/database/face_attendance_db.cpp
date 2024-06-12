@@ -31,7 +31,7 @@ void FaceAttendanceDB::InsertFaceAttendance(
            << face_attendance.object_image_full_path << "camera_id"
            << face_attendance.camera_id << "camera_name"
            << face_attendance.camera_name << "time_stamp"
-           << face_attendance.time_stamp;
+           << face_attendance.time_stamp << "score" << face_attendance.score;
   collection.insert_one(document.view());
   std::cout << "InsertFaceAttendance success" << std::endl;
 }

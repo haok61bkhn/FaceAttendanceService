@@ -11,19 +11,22 @@ class FaceAttendanceInfor {
   FaceAttendanceInfor(std::string& face_id, std::string& object_image_path,
                       std::string& object_image_full_path,
                       std::string& camera_id, std::string& camera_name,
-                      int time_stamp)
+                      int time_stamp, float& score)
       : face_id(face_id),
         object_image_path(object_image_path),
         object_image_full_path(object_image_full_path),
         camera_id(camera_id),
         camera_name(camera_name),
-        time_stamp(time_stamp) {}
+        time_stamp(time_stamp),
+        score(score) {}
+
   std::string face_id;
   std::string object_image_path;
   std::string object_image_full_path;
   std::string camera_id;
   std::string camera_name;
   int time_stamp;
+  float score;
 };
 }  // namespace types
 #endif  // FACE_ATTENDANCE_INFOR_H

@@ -41,8 +41,8 @@ def login(username, password, ip):
 def set_hook_url(hook_url, ip, token):
     try:
         url = ip + "/hook"
-        headers = {"Authorization": "Bearer " + token}
-        response = requests.post(url, json={"url": hook_url}, headers=headers)
+
+        response = requests.post(url, json={"url": hook_url})
         if response.status_code == 200:
             return True, "Thành công"
         else:

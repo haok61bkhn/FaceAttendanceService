@@ -33,8 +33,8 @@ def create_face_item(face_item: FaceItem):
 
 
 @app.post("/test_hook")
-def test_hook():
-    return {"code": 200, "message": "Success"}
+def hook():
+    return {"code": 200, "message": "Success", "status": True}
 
 
 def start_fastapi():
