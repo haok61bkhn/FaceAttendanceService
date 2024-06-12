@@ -27,7 +27,7 @@ DATA_DIR = "DATA"
 class MainUi(QtWidgets.QMainWindow):
     def __init__(self, face_queue):
         super(MainUi, self).__init__()
-        uic.loadUi("ui/main.ui", self)
+        uic.loadUi("resource/ui/main.ui", self)
         self.menu_frames = [
             self.frame_login,
             self.frame_main,

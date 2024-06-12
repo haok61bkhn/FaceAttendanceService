@@ -56,13 +56,9 @@ def remove_camera(camera_id):
 
 
 def set_hook_url(hook_url):
-    if hook_url != "":
-        if hook_url[-1] != "/":
-            hook_url += "/"
-        hook_url += "face_item"
-        consumer.set_hook_url(hook_url)
-        return True
-    return False
+    hook_url += ":8001/face_item"
+    consumer.set_hook_url(hook_url)
+    return True
 
 
 def get_cameras():
