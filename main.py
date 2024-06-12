@@ -7,6 +7,7 @@ import os
 import cv2
 from src.deepstream_manager_service import DeepStreamManagerService
 import threading
+import requests
 
 
 file_current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -56,6 +57,9 @@ def remove_camera(camera_id):
 
 
 def set_hook_url(hook_url):
+    reponse = requests.get(hook_url + ":8001/test_hook")
+    if reponse.status_code != 200:
+        return False
     hook_url += ":8001/face_item"
     consumer.set_hook_url(hook_url)
     return True

@@ -32,6 +32,11 @@ def create_face_item(face_item: FaceItem):
     return {"code": 200, "message": "Success"}
 
 
+@app.post("/test_hook")
+def test_hook():
+    return {"code": 200, "message": "Success"}
+
+
 def start_fastapi():
     uvicorn.run(app, host="0.0.0.0", port=8001)
 

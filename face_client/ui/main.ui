@@ -850,7 +850,7 @@ QPushButton:pressed {
                 <string notr="true"/>
                </property>
                <property name="currentIndex">
-                <number>3</number>
+                <number>2</number>
                </property>
                <widget class="QWidget" name="page_login">
                 <property name="styleSheet">
@@ -1565,7 +1565,7 @@ QGroupBox::title {
                            </widget>
                           </item>
                           <item>
-                           <widget class="QPushButton" name="pushButton">
+                           <widget class="QPushButton" name="bn_register_folder">
                             <property name="maximumSize">
                              <size>
                               <width>150</width>
@@ -1650,6 +1650,18 @@ QGroupBox::title {
                           </property>
                           <item>
                            <widget class="QFrame" name="frame_image_5">
+                            <property name="minimumSize">
+                             <size>
+                              <width>330</width>
+                              <height>320</height>
+                             </size>
+                            </property>
+                            <property name="maximumSize">
+                             <size>
+                              <width>330</width>
+                              <height>320</height>
+                             </size>
+                            </property>
                             <property name="frameShape">
                              <enum>QFrame::StyledPanel</enum>
                             </property>

@@ -259,3 +259,18 @@ def open_files_dialog():
         options=options,
     )
     return files
+
+
+def open_folder_dialog():
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    folder = QFileDialog.getExistingDirectory(None, "Open Folder", options=options)
+    return folder
+
+
+def get_folder_paths(folder_path):
+    return [
+        os.path.join(folder_path, f)
+        for f in os.listdir(folder_path)
+        if not os.path.isfile(os.path.join(folder_path, f))
+    ]

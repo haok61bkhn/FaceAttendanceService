@@ -5,12 +5,15 @@ from .tools import (
     get_faces,
     base64_to_cv2,
     remove_face,
+    open_folder_dialog,
+    get_folder_paths,
 )
 from PyQt5.QtCore import pyqtSignal as Signal
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 import cv2
+import glob
 
 
 class FaceRegisterUI(QtWidgets.QTabWidget):
@@ -32,6 +35,7 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
         self.ui.bn_clear.clicked.connect(self.clear)
         self.ui.bn_get_faces.clicked.connect(self.get_face_list)
         self.ui.tb_faces.clicked.connect(self.select_row_event)
+        self.ui.bn_register_folder.clicked.connect(self.register_folder)
         self.ui.bn_remove_user.clicked.connect(self.remove_face_event)
 
     def first_init(self):
@@ -64,6 +68,7 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
 
     def init(self):
         self.clear()
+        self.get_face_list()
         self.ui.bn_remove_user.setEnabled(False)
 
     def clear(self):
@@ -144,6 +149,14 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
                 row.append(item)
             self.model.appendRow(row)
 
+    def get_pixmap(self, image):
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        height, width, channel = image.shape
+        bytes_per_line = 3 * width
+        qimage = QImage(image.data, width, height, bytes_per_line, QImage.Format_RGB888)
+        pixmap = QPixmap.fromImage(qimage)
+        return pixmap
+
     def select_row_event(self):
 
         selected = self.ui.tb_faces.selectedIndexes()
@@ -154,16 +167,8 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
         image1 = self.faces[row]["image1"]
         if image1 != "":
             image1_cv = base64_to_cv2(image1)
-            image1_cv = cv2.cvtColor(image1_cv, cv2.COLOR_BGR2RGB)
-            image1_qt = QImage(
-                image1_cv.data,
-                image1_cv.shape[1],
-                image1_cv.shape[0],
-                QImage.Format_RGB888,
-            )
-            # set scaled content keeps the aspect ratio of the image
             self.ui.lb_image_face.setScaledContents(True)
-            self.ui.lb_image_face.setPixmap(QPixmap.fromImage(image1_qt))
+            self.ui.lb_image_face.setPixmap(self.get_pixmap(image1_cv))
 
     def remove_face_event(self):
         selected = self.ui.tb_faces.selectedIndexes()
@@ -179,3 +184,28 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
             self.get_face_list()
             self.clear_select_image()
             self.ui.bn_remove_user.setEnabled(False)
+
+    def register_face_folder(self, folder_path):
+        face_id = folder_path.split("/")[-1]
+        image_paths = (
+            glob.glob(folder_path + "/*.jpg")
+            + glob.glob(folder_path + "/*.png")
+            + glob.glob(folder_path + "/*.jpeg")
+        )
+        if len(image_paths) > 4:
+            image_paths = image_paths[:4]
+        if len(image_paths) > 0:
+            status, message = register_face(
+                face_id, face_id, image_paths, self.ui.token, self.ui.ip
+            )
+
+    def register_folder(self):
+        folder_path = open_folder_dialog()
+        if folder_path == "":
+            return
+        else:
+            folder_paths = get_folder_paths(folder_path)
+            for folder_path in folder_paths:
+                self.register_face_folder(folder_path)
+            self.get_face_list()
+            self.message_signal.emit("Thành công", "Đăng ký thành công")
