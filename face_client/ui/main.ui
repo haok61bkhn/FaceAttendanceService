@@ -1709,11 +1709,30 @@ QGroupBox::title {
                           <property name="bottomMargin">
                            <number>0</number>
                           </property>
-                          <item alignment="Qt::AlignRight">
-                           <widget class="QPushButton" name="bn_remove_user">
-                            <property name="text">
-                             <string>Xóa user</string>
+                          <item>
+                           <widget class="QFrame" name="frame_16">
+                            <property name="frameShape">
+                             <enum>QFrame::StyledPanel</enum>
                             </property>
+                            <property name="frameShadow">
+                             <enum>QFrame::Raised</enum>
+                            </property>
+                            <layout class="QHBoxLayout" name="horizontalLayout_35">
+                             <item alignment="Qt::AlignLeft">
+                              <widget class="QPushButton" name="bn_remove_all_user">
+                               <property name="text">
+                                <string>Xóa toàn bộ</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item alignment="Qt::AlignRight">
+                              <widget class="QPushButton" name="bn_remove_user">
+                               <property name="text">
+                                <string>Xóa user</string>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
                            </widget>
                           </item>
                           <item>

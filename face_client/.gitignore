@@ -2,3 +2,5 @@ DeployFaceTest
 dist
 build
 *.zip
+app
+*.exe

@@ -176,21 +176,21 @@ def get_faces():
             image_1 = cv2.imread(image_path_1)
             if image_1 is not None:
                 face["image1"] = cv2_to_base64(image_1)
-            image_path_2 = row[3]
-            if image_path_2 is not None:
-                image_2 = cv2.imread(image_path_2)
-                if image_2 is not None:
-                    face["image2"] = cv2_to_base64(image_2)
-            image_path_3 = row[4]
-            if image_path_3 is not None:
-                image_3 = cv2.imread(image_path_3)
-                if image_3 is not None:
-                    face["image3"] = cv2_to_base64(image_3)
-            image_path_4 = row[5]
-            if image_path_4 is not None:
-                image_4 = cv2.imread(image_path_4)
-                if image_4 is not None:
-                    face["image4"] = cv2_to_base64(image_4)
+            # image_path_2 = row[3]
+            # if image_path_2 is not None:
+            #     image_2 = cv2.imread(image_path_2)
+            #     if image_2 is not None:
+            #         face["image2"] = cv2_to_base64(image_2)
+            # image_path_3 = row[4]
+            # if image_path_3 is not None:
+            #     image_3 = cv2.imread(image_path_3)
+            #     if image_3 is not None:
+            #         face["image3"] = cv2_to_base64(image_3)
+            # image_path_4 = row[5]
+            # if image_path_4 is not None:
+            #     image_4 = cv2.imread(image_path_4)
+            #     if image_4 is not None:
+            #         face["image4"] = cv2_to_base64(image_4)
             faces.append(face)
         return faces
 

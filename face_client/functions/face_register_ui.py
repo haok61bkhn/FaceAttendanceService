@@ -14,6 +14,8 @@ from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 import cv2
 import glob
+import os
+from PyQt5.QtWidgets import QMessageBox
 
 
 class FaceRegisterUI(QtWidgets.QTabWidget):
@@ -37,6 +39,7 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
         self.ui.tb_faces.clicked.connect(self.select_row_event)
         self.ui.bn_register_folder.clicked.connect(self.register_folder)
         self.ui.bn_remove_user.clicked.connect(self.remove_face_event)
+        self.ui.bn_remove_all_user.clicked.connect(self.remove_all_faces_event)
 
     def first_init(self):
         self.register_images = [
@@ -184,6 +187,25 @@ class FaceRegisterUI(QtWidgets.QTabWidget):
             self.get_face_list()
             self.clear_select_image()
             self.ui.bn_remove_user.setEnabled(False)
+
+    def remove_all_faces(self, button):
+        if button.text() == "&Yes":
+            for face in self.faces:
+                face_id = face["faceId"]
+                status, message = remove_face(face_id, self.ui.token, self.ui.ip)
+            self.get_face_list()
+            self.message_signal.emit("Thành công", "Xóa tất cả dữ liệu thành công")
+
+    def remove_all_faces_event(self):
+        # yes no dialog
+        yn_dialog = QMessageBox()
+        yn_dialog.setIcon(QMessageBox.Question)
+        yn_dialog.setWindowTitle("Xác nhận")
+        yn_dialog.setText("Bạn có chắc chắn muốn xóa tất cả dữ liệu?")
+        yn_dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        yn_dialog.setDefaultButton(QMessageBox.No)
+        yn_dialog.buttonClicked.connect(self.remove_all_faces)
+        yn_dialog.exec_()
 
     def register_face_folder(self, folder_path):
         face_id = folder_path.split("/")[-1]

@@ -13,7 +13,6 @@ from .face_item_ui import FaceItemUI
 class FaceListUI(QWidget):
     def __init__(self, parent=None):
         super(FaceListUI, self).__init__(parent)
-
         self.max_columns = 5
         self.max_rows = 20
         self.initUI()

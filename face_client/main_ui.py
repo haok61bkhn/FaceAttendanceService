@@ -28,6 +28,8 @@ class MainUi(QtWidgets.QMainWindow):
     def __init__(self, face_queue):
         super(MainUi, self).__init__()
         uic.loadUi("ui/main.ui", self)
+        title_name = "Điểm danh khuôn mặt"
+        self.setWindowTitle(title_name)
         self.menu_frames = [
             self.frame_login,
             self.frame_main,
