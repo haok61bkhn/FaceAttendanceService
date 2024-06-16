@@ -7,6 +7,42 @@ static void ChangeSizeTiler(int max_index, int& row_tiler, int& col_tiler) {
   col_tiler = (guint)ceil(1.0 * max_index / row_tiler);
 }
 
+cv::Mat Probe::GetImageFromProbe(GstPadProbeInfo* info,
+                                 NvDsFrameMeta* nvds_frame_meta) {
+  GstMapInfo in_map_info;
+  GstBuffer* buffer = static_cast<GstBuffer*>(info->data);
+
+  memset(&in_map_info, 0, sizeof(in_map_info));
+  if (!gst_buffer_map(buffer, &in_map_info, GST_MAP_READ)) {
+    gst_buffer_unmap(buffer, &in_map_info);
+    return cv::Mat();
+  }
+  NvBufSurface* surface = reinterpret_cast<NvBufSurface*>(in_map_info.data);
+  int height = surface->surfaceList[nvds_frame_meta->batch_id].height;
+  int width = surface->surfaceList[nvds_frame_meta->batch_id].width;
+  int pitch = surface->surfaceList[nvds_frame_meta->batch_id].pitch;
+  if (NvBufSurfaceMap(surface, nvds_frame_meta->batch_id, 0, NVBUF_MAP_READ) !=
+      0) {
+    std::cout << "NvBufSurfaceMap for getting mappedAddr to be accessed by CPU "
+                 "failed";
+  }
+
+  if (surface->memType == NVBUF_MEM_SURFACE_ARRAY) {
+    NvBufSurfaceSyncForCpu(surface, nvds_frame_meta->batch_id, 0);
+  }
+
+  void* mappedAddr =
+      surface->surfaceList[nvds_frame_meta->batch_id].mappedAddr.addr[0];
+  cv::Mat rgbaMat = cv::Mat(height, width, CV_8UC4, mappedAddr, pitch);
+
+  cv::Mat bgrMat;
+  cv::cvtColor(rgbaMat, bgrMat, cv::COLOR_RGBA2BGR);
+
+  NvBufSurfaceUnMap(surface, nvds_frame_meta->batch_id, 0);
+  gst_buffer_unmap(buffer, &in_map_info);
+  return bgrMat;
+}
+
 GstPadProbeReturn Probe::CustomProbe(GstPad* pad, GstPadProbeInfo* info,
                                      gpointer data) {
   NvDsObjectMeta* obj_meta = NULL;
@@ -22,57 +58,40 @@ GstPadProbeReturn Probe::CustomProbe(GstPad* pad, GstPadProbeInfo* info,
           .count();
 
   GstBuffer* buf = (GstBuffer*)info->data;
-  GstMapInfo inmap = GST_MAP_INFO_INIT;
-  if (!gst_buffer_map(buf, &inmap, GST_MAP_READ)) {
-    GST_ERROR("input buffer mapinfo failed");
-    return GST_PAD_PROBE_DROP;
-  }
-  NvBufSurface* surface = (NvBufSurface*)inmap.data;
-  gst_buffer_unmap(buf, &inmap);
+  // GstMapInfo inmap = GST_MAP_INFO_INIT;
+  // if (!gst_buffer_map(buf, &inmap, GST_MAP_READ)) {
+  //   GST_ERROR("input buffer mapinfo failed");
+  //   return GST_PAD_PROBE_DROP;
+  // }
+  // NvBufSurface* surface = (NvBufSurface*)inmap.data;
+  // gst_buffer_unmap(buf, &inmap);
 
   NvDsBatchMeta* batch_meta = gst_buffer_get_nvds_batch_meta(buf);
   for (l_frame = batch_meta->frame_meta_list; l_frame != nullptr;
        l_frame = l_frame->next) {
     types::FrameInfor data_frame;
     NvDsFrameMeta* frame_meta = (NvDsFrameMeta*)(l_frame->data);
-    int source_id = frame_meta->source_id;
-    if (source_id >= customData->max_index) {
-      customData->max_index = source_id + 1;
-      ChangeSizeTiler(customData->max_index, customData->row_tiler,
-                      customData->col_tiler);
-      int width = 1920 / customData->col_tiler;
-      int height = 1080 / customData->row_tiler;
-      customData->sub_reconnect_frame =
-          customData->reconnect_frame_origin.clone();
-      cv::resize(customData->sub_reconnect_frame,
-                 customData->sub_reconnect_frame, cv::Size(width, height));
-    }
-    customData->last_runnings[source_id] = now;
-    source_id = customData->map_showing_source[source_id];
-    data_frame.fps = customData->profilers[source_id].Tick();
-    customData->frame_numbers[source_id]++;
+    data_frame.fps = customData->profilers[frame_meta->source_id].Tick();
+    customData->frame_numbers[frame_meta->source_id]++;
     int now_milli = std::chrono::duration_cast<std::chrono::milliseconds>(
                         p1.time_since_epoch())
                         .count();
-    data_frame.frame_number = customData->frame_numbers[source_id];
-    data_frame.fps = 1000.0 / (now_milli - customData->last_times[source_id]);
-    customData->last_times[source_id] = now_milli;
-    data_frame.source_id = source_id;
-    void* data_ptr = surface->surfaceList[frame_meta->batch_id].dataPtr;
-    int src_height = surface->surfaceList[frame_meta->batch_id].height;
-    int src_width = surface->surfaceList[frame_meta->batch_id].width;
-    int data_size = surface->surfaceList[frame_meta->batch_id].dataSize;
-    uint32_t src_pitch = surface->surfaceList[frame_meta->batch_id].pitch;
-    cv::cuda::GpuMat gpu_mat = cv::cuda::GpuMat(src_height * 1.5, src_width,
-                                                CV_8UC1, data_ptr, src_pitch);
-    cv::Mat cpu_mat;
-    gpu_mat.download(cpu_mat);
-    cv::cvtColor(cpu_mat, cpu_mat, cv::COLOR_YUV2BGR_NV12);
-    if (customData->main_image_paths[source_id] == "") {
-      int height = data_frame.frame.rows;
-      int width = data_frame.frame.cols;
-      data_frame.frame = cpu_mat;
+    data_frame.frame_number = customData->frame_numbers[frame_meta->source_id];
+
+    std::cout << "SOURCE ID: " << frame_meta->source_id
+              << " FPS: " << data_frame.fps << std::endl;
+    customData->last_times[frame_meta->source_id] = now_milli;
+    data_frame.source_id = frame_meta->source_id;
+    // std::cout << "COLOR FORMAT: "
+    //           << surface->surfaceList[frame_meta->batch_id].colorFormat
+    //           << std::endl;
+
+    if (frame_meta->num_obj_meta == 0) {
+      continue;
     }
+
+    cv::Mat cpu_mat = GetImageFromProbe(info, frame_meta);
+
     for (auto l_obj = frame_meta->obj_meta_list; l_obj != nullptr;
          l_obj = l_obj->next) {
       NvDsObjectMeta* obj_meta = (NvDsObjectMeta*)(l_obj->data);

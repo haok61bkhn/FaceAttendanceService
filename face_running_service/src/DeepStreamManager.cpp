@@ -239,7 +239,7 @@ void DeepStreamManager::InitPipeline() {
   gint batched_push_timeout = all_configs["streamuxer"]["batched_push_timeout"];
   g_object_set(G_OBJECT(streammux), "batched-push-timeout",
                batched_push_timeout, NULL);
-  g_object_set(G_OBJECT(streammux), "batch-size", 30, NULL);
+  g_object_set(G_OBJECT(streammux), "batch-size", 1, NULL);
   int cuda_memory_type = common_config["cudadec_mem_type"];
   g_object_set(G_OBJECT(streammux), "width", MUXER_OUTPUT_WIDTH, "height",
                MUXER_OUTPUT_HEIGHT, "gpu-id", GPU_ID, NULL);
@@ -254,25 +254,33 @@ void DeepStreamManager::InitPipeline() {
 
   detection = PrimaryGie::Create("detection");
   tracker = Tracker::Create();
-  osd = gst_element_factory_make("nvdsosd", "nvdsosd");
-  g_object_set(G_OBJECT(osd), "process-mode", 1, "display-text", 0, NULL);
-  tiler = gst_element_factory_make("nvmultistreamtiler", "nvtiler");
-  g_object_set(G_OBJECT(tiler), "rows", 1, "columns", 1, "width",
-               MUXER_OUTPUT_WIDTH, "height", MUXER_OUTPUT_HEIGHT, NULL);
+  // osd = gst_element_factory_make("nvdsosd", "nvdsosd");
+  // g_object_set(G_OBJECT(osd), "process-mode", 1, "display-text", 0, NULL);
+  // tiler = gst_element_factory_make("nvmultistreamtiler", "nvtiler");
+  // g_object_set(G_OBJECT(tiler), "rows", 1, "columns", 1, "width",
+  //  MUXER_OUTPUT_WIDTH, "height", MUXER_OUTPUT_HEIGHT, NULL);
   nvvideoconvert =
       gst_element_factory_make("nvvideoconvert", "nvvideo-converter");
-  SET_GPU_ID(nvvideoconvert, GPU_ID);
-  sink_queue = gst_element_factory_make("queue", "sink-queue");
 
-  sink_list = Sink::Create(false);
-  sink = sink_list[0];
+  GstElement* caps_filter = gst_element_factory_make("capsfilter", NULL);
+  GstCaps* caps =
+      gst_caps_new_simple("video/x-raw", "format", G_TYPE_STRING, "RGBA", NULL);
+
+  GstCapsFeatures* feature = gst_caps_features_new(MEMORY_FEATURES, NULL);
+  gst_caps_set_features(caps, 0, feature);
+  g_object_set(G_OBJECT(caps_filter), "caps", caps, NULL);
+  gst_caps_unref(caps);
+
+  // sink_queue = gst_element_factory_make("queue", "sink-queue");
+
+  // sink_list = Sink::Create(false);
+  // sink = sink_list[0];
 
   // auto obj_ctx_handle = nvds_obj_enc_create_context(0);
   // data->obj_ctx_handle = obj_ctx_handle;
   data->enable_fps_sink = true;
 
-  if (!detection || !nvvideoconvert || !sink || !tracker || !tiler || !osd ||
-      !sink_queue) {
+  if (!detection || !nvvideoconvert || !caps_filter || !tracker) {
     g_printerr("One element could not be created. Exiting.\n");
     return;
   }
@@ -282,11 +290,11 @@ void DeepStreamManager::InitPipeline() {
       new BUS_CALL_DATA_TYPE(loop, eos_lock, g_eos_list);
   bus_watch_id = gst_bus_add_watch(bus, bus_call, bus_call_data);
   gst_object_unref(bus);
-  gst_bin_add_many(GST_BIN(pipeline), detection, tracker, tiler, osd,
-                   nvvideoconvert, sink_queue, sink, NULL);
+  gst_bin_add_many(GST_BIN(pipeline), detection, nvvideoconvert, caps_filter,
+                   tracker, NULL);
 
-  if (!gst_element_link_many(streammux, detection, tracker, tiler, osd,
-                             nvvideoconvert, sink_queue, sink, NULL)) {
+  if (!gst_element_link_many(streammux, detection, nvvideoconvert, caps_filter,
+                             tracker, NULL)) {
     g_printerr("Elements could not be linked. Exiting.\n");
     return;
   }
@@ -362,22 +370,6 @@ void DeepStreamManager::ProcessDataFrameThread() {
   while (!stop_thread) {
     if (data->queue_datas->pop(data_frame)) {
       int source_id = data_frame.source_id;
-      if (!data_frame.frame.empty()) {
-        int height = data_frame.frame.rows;
-        int width = data_frame.frame.cols;
-        std::string main_image_path =
-            config->main_image_directory + std::to_string(width) + "_" +
-            std::to_string(height) + "_" + camera_ids[source_id] + ".jpg";
-        cv::Mat main_image = data_frame.frame.clone();
-        data->main_image_paths[source_id] = main_image_path;
-        cv::resize(main_image, main_image, cv::Size(1720, 860));
-        if (!main_image.empty()) {
-          cv::imwrite(main_image_path, main_image);
-          data->main_image_paths[source_id] = main_image_path;
-          // emit UpdateMainImageSignal(source_id,
-          //                            data->main_image_paths[source_id]);
-        }
-      }
       SubmitObjectData(data_frame, data_frame.source_id);
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
@@ -423,44 +415,6 @@ void DeepStreamManager::TrackIdToObjectId(
               "_" + init_time_strs[source_id];
   track_to_object[source_id][tracking_id] = object_id;
   track_to_class[source_id][tracking_id] = class_name;
-}
-
-void DeepStreamManager::PreSubmitFrame(cv::Mat& image, int show_mode) {
-  if (show_mode != -1) {
-    for (int i = 0; i < data->polygons[show_mode].size(); i++) {
-      cv::line(
-          image, data->polygons[show_mode][i],
-          data->polygons[show_mode][(i + 1) % data->polygons[show_mode].size()],
-          cv::Scalar(0, 255, 0), 2);
-    }
-  } else {
-    int border_size = 2;
-    auto p1 = std::chrono::system_clock::now();
-    int now =
-        std::chrono::duration_cast<std::chrono::seconds>(p1.time_since_epoch())
-            .count();
-    for (int i = 0; i < data->row_tiler * data->col_tiler; i++) {
-      if (data->last_runnings[i] + 3 < now) {
-        int x = i % data->col_tiler * image.cols / data->col_tiler;
-        int y = i / data->col_tiler * image.rows / data->row_tiler;
-        cv::Rect rect = cv::Rect(x, y, image.cols / data->col_tiler,
-                                 image.rows / data->row_tiler);
-        data->sub_reconnect_frame.copyTo(image(rect));
-      }
-    }
-
-    for (int i = 0; i < data->row_tiler; i++) {
-      for (int j = 0; j < data->col_tiler; j++) {
-        int index = i * data->col_tiler + j;
-        int x = j * image.cols / data->col_tiler;
-        int y = i * image.rows / data->row_tiler;
-        int width = image.cols / data->col_tiler;
-        int height = image.rows / data->row_tiler;
-        cv::Rect rect = cv::Rect(x, y, width, height);
-        cv::rectangle(image, rect, cv::Scalar(255, 255, 255), border_size);
-      }
-    }
-  }
 }
 
 void DeepStreamManager::SubmitObjectData(types::FrameInfor& data_frame,

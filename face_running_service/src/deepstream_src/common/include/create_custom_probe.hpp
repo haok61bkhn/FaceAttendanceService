@@ -12,4 +12,6 @@ class Probe {
  public:
   static GstPadProbeReturn CustomProbe(GstPad* pad, GstPadProbeInfo* info,
                                        gpointer data);
+  static cv::Mat GetImageFromProbe(GstPadProbeInfo* info,
+                                   NvDsFrameMeta* nvds_frame_meta);
 };

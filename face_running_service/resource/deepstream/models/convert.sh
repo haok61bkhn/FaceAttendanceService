@@ -1,1 +1,1 @@
-/usr/src/tensorrt/bin/trtexec --onnx=Face/scrfd_2.5g.onnx --saveEngine=Face/scrfd_2.5g.engine --fp16
+/usr/src/tensorrt/bin/trtexec --onnx=yolov8n-face.onnx --saveEngine=yolov8n-face.engine --fp16
