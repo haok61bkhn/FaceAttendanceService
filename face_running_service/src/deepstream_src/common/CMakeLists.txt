@@ -9,4 +9,3 @@ add_library(${MODULE_NAME} ${HEADER_LIST} ${SOURCE_LIST})
 target_include_directories(${MODULE_NAME} PUBLIC  "${CMAKE_CURRENT_SOURCE_DIR}/include" 
                                             PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
 target_link_libraries(${MODULE_NAME} PUBLIC cuda gstreammer nvds_common config ${OpenCV_LIBRARIES} gstapp-1.0)
-target_compile_features(${MODULE_NAME} PUBLIC cxx_std_20)
