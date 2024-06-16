@@ -7,6 +7,7 @@ pydantic-settings==2.0.0
 requests
 bcrypt==3.2.0
 opencv-python
+numpy==1.26.4
 python-multipart
 grpcio
 google
