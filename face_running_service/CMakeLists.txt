@@ -74,6 +74,7 @@ include_directories(
 )
 link_directories(${V_NOABI_BSON_LIB})
 
+
 add_executable(main 
               main.cpp            
               src/Tools.cpp
@@ -92,5 +93,4 @@ add_executable(main
               src/database/camera_db.cpp
               src/database/face_attendance_db.cpp
               )
-
-target_link_libraries(main PRIVATE   gRPC::grpc++_reflection gRPC::grpc++ ${_PROTOBUF_LIBPROTOBUF} ${OpenCV_LIBRARIES} opencv_core opencv_highgui opencv_imgcodecs  opencv_imgproc mongocxx bsoncxx AI_SDK cuda gstreammer nvds_common config common utils sqlite3  )
+target_link_libraries(main PRIVATE  gRPC::grpc++ ${_PROTOBUF_LIBPROTOBUF} ${OpenCV_LIBRARIES} opencv_core opencv_highgui opencv_imgcodecs  opencv_imgproc mongocxx bsoncxx AI_SDK cuda gstreammer nvds_common config common utils sqlite3  )
