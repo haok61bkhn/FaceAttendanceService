@@ -9,6 +9,8 @@ import threading
 import cv2
 from functions.tools import base64_to_cv2
 
+# from pyngrok import ngrok
+
 app = FastAPI()
 face_queue = Queue()
 
@@ -38,6 +40,8 @@ def hook():
 
 
 def start_fastapi():
+    # url = ngrok.connect(8001).public_url
+    # print("Public URL:", url)
     uvicorn.run(app, host="0.0.0.0", port=8001)
 
 
