@@ -1,0 +1,6 @@
+---
+HNSW:
+  DIM: 512
+  MAX_SIZE: 100000
+  THRESHOLD: 1
+  TOP_K: 1

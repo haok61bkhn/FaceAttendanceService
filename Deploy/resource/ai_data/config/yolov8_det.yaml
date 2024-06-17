@@ -1,0 +1,8 @@
+OBJECT_DET:
+    onnx_file: "../weights/yolov8s.onnx"
+    engine_file: "../weights/yolov8s.engine"
+    BATCH_SIZE: 1
+    INPUT_CHANNEL: 3
+    IMAGE_WIDTH: 640
+    IMAGE_HEIGHT: 640
+    lable_file: "../config/det_classes.txt"

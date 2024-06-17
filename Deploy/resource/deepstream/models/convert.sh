@@ -1,1 +1,1 @@
-/usr/src/tensorrt/bin/trtexec --onnx=Face/scrfd_2.5g.onnx --saveEngine=Face/scrfd_2.5g.engine --fp16
+/usr/src/tensorrt/bin/trtexec --onnx=scrfd_500m_640_1.onnx --saveEngine=scrfd_500m_640_1.engine --fp16

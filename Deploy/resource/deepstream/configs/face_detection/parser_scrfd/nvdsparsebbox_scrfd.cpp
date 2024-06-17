@@ -7,7 +7,6 @@
 #include <fstream>
 #include <iostream>
 #include <numeric>
-#include <opencv2/opencv.hpp>
 #include <unordered_map>
 #include "nvdsinfer_custom_impl.h"
 #define CLOCKS_PER_SEC 1000000
@@ -28,12 +27,17 @@ int modelSize = 640;
 std::vector<std::vector<float>> anchors;
 std::vector<std::vector<std::vector<float>>> allAnchorCenters;
 
+struct Point {
+  float x;
+  float y;
+};
+
 struct Box {
   float x1;
   float x2;
   float y1;
   float y2;
-  std::vector<cv::Point> landmarks;
+  std::vector<Point> landmarks;
   float confident;
 };
 
@@ -131,7 +135,7 @@ void GenerateProposals(const std::vector<std::vector<float>>& anchors,
       for (int k = 0; k < 5; k++) {
         float kpsx = cx + kps_blob[i * 10 + 2 * k] * feat_stride;
         float kpsy = cy + kps_blob[i * 10 + 2 * k + 1] * feat_stride;
-        box.landmarks.emplace_back(cv::Point{kpsx, kpsy});
+        box.landmarks.emplace_back(Point{kpsx, kpsy});
       }
       faceobjects.push_back(box);
     }

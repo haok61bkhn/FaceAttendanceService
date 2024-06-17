@@ -3,8 +3,8 @@
     "TIMEOUT_ONLINE": 10,
     "SKIP_OBJECT": 3,
     "NUM_IMAGE_SAVING_THREADS": 1,
-    "NUM_LP_PROCESSORS": 1,
-    "NUM_FACE_PROCESSORS": 2,
+    "NUM_LP_PROCESSORS": 0,
+    "NUM_FACE_PROCESSORS": 1,
     "FEATURE_SAVE_STEP_TIME": 3600,
     "ANNOTATION_SKIP_FRAME": 60,
     "DATA_ROOT_DIRECTORY": "./DATA/",
@@ -26,11 +26,8 @@
     "FACE_MANAGER_DB_PATH": "face_manager.db",
     "PLAYBACK_DB_PATH": "playback.db",
     "FACE_MANAGER_CONFIG_PATH": "resource/ai_data/config/face_manager.yaml",
-    "FEATURE_MANAGER_CONFIG_PATH": "resource/ai_data/config/feature_manager.yaml",
     "DEEPSTREAM_CONFIG_PATH": "resource/deepstream/config.json",
     "MONGO_URI": "mongodb://localhost:27017/",
     "MONGO_DB": "face_attendance_db",
-    "MONGO_COLLECTION": "face_attendance",
-    "FEATURE_MANAGER_ADDRESS": "localhost:50052",
-    "GROUP_SEARCH" : "school"
+    "MONGO_COLLECTION": "face_attendance"
 }

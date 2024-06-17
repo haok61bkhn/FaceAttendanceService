@@ -1,0 +1,8 @@
+CHAR_DET:
+    onnx_file: "resources/LicensePlate/char_320_1.onnx"
+    engine_file: "resources/LicensePlate/char_320_1.engine"
+    BATCH_SIZE: 1
+    INPUT_CHANNEL: 3
+    IMAGE_WIDTH: 320
+    IMAGE_HEIGHT: 320
+    lable_file: "resources/LicensePlate/chars.txt"

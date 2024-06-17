@@ -14,7 +14,7 @@
     "width": 1920,
     "height": 1080,
     "gpu_id": 0,
-    "batched_push_timeout": 40000
+    "batched_push_timeout": 4000
   },
   "gie": {
     "detection": {
@@ -23,7 +23,7 @@
       "interval": 0,
       "unique_id": 0,
       "gpu_id": 0,
-      "model_config": "resource/deepstream/configs/face_detection/yolov8_face.txt"
+      "model_config": "resource/deepstream/configs/face_detection/scrfd_face.txt"
     }
   },
   "tracking": {
@@ -39,16 +39,17 @@
   "tiler": {
     "enable": true,
     "rows": 1,
-    "columns": 2,
+    "columns": 1,
     "width": 1920,
     "height": 1080,
     "gpu_id": 0
   },
   "sink": {
     "enable": true,
+    "enable_fps_sink": true,
     "sink_list": [
       {
-        "type": "rtsp"
+        "type": "fakesink"
       }
     ]
   }

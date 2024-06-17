@@ -23,10 +23,9 @@ NVCC:=/usr/local/cuda-$(CUDA_VER)/bin/nvcc
 PKGS:= gstreamer-1.0
 
 
-#OPENCV = pkg-config --cflags --libs opencv4
 
 CFLAGS:= -Wall -std=c++11 -shared -fPIC -Wno-error=deprecated-declarations
-CFLAGS+= -I -I/usr/local/cuda-$(CUDA_VER)/include  -I/usr/local/include/opencv4 -I/opt/nvidia/deepstream/deepstream/sources/includes/ 
+CFLAGS+= -I/opt/nvidia/deepstream/deepstream/sources/includes -I/usr/local/cuda-$(CUDA_VER)/include
 
 LIBS:= -lnvinfer_plugin -lnvinfer -lnvparsers -L/usr/local/cuda-$(CUDA_VER)/lib64 -lcudart -lcublas -lstdc++fs $(shell pkg-config --libs $(PKGS))
 
