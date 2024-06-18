@@ -214,8 +214,8 @@ bool NvDsInferCustomSCRFD(
     object.mask_size =
         sizeof(float) * mask_instance_width * mask_instance_height;
     object.mask = new float[mask_instance_width * mask_instance_height];
-    object.mask_width = mask_instance_width;
-    object.mask_height = mask_instance_height;
+    object.mask_width = modelSize;
+    object.mask_height = modelSize;
 
     float landmark_box[mask_instance_width * mask_instance_height];
     for (int k = 0; k < 5; k++) {
