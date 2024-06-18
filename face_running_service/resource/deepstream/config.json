@@ -23,7 +23,7 @@
       "interval": 0,
       "unique_id": 0,
       "gpu_id": 0,
-      "model_config": "resource/deepstream/configs/face_detection/yolov8_face.txt"
+      "model_config": "resource/deepstream/configs/face_detection/scrfd_face.txt"
     }
   },
   "tracking": {

@@ -98,8 +98,8 @@ GstPadProbeReturn Probe::CustomProbe(GstPad* pad, GstPadProbeInfo* info,
         int num_points = 5;
         for (int i = 0; i < num_points; i += 1) {
           auto mask_params = &obj_meta->mask_params;
-          int x = (mask_params->data[i * 3] - pad_x) / gain - x1;
-          int y = (mask_params->data[i * 3 + 1] - pad_y) / gain - y1;
+          int x = (mask_params->data[i * 3]) / gain - x1;
+          int y = (mask_params->data[i * 3 + 1]) / gain - y1;
           cv::Point point(x, y);
           object.key_points.push_back(point);
         }
