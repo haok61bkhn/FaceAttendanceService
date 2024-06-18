@@ -76,9 +76,11 @@ void AIController::ProcessUpdatingDataThread() {
       std::cout << "updating_queue " << updating_queue.size() << std::endl;
     }
     if (updating_queue.pop(object_updating)) {
+      std::cout << "size" << "\n";
       auto& feature = object_updating.feature;
       std::vector<types::FaceSearchResult> face_results =
           face_manager->Search(feature, 0.6);
+      std::cout << "face_results.size()" << face_results.size() << std::endl;
       if (face_results.size() > 0) {
         auto& id = face_results[0].pid;
         auto& score = face_results[0].score;

@@ -78,6 +78,7 @@ void FaceProcessor::RunFaceDetect() {
       try {
         cv::Mat aligned_face = face_aligner->AlignFace(
             object.object.object_image, object.landmark);
+        cv::imwrite("face_align_"+std::to_string(object.object_id)+".jpg", aligned_face);
         float area = (object.object.rect.width * object.object.rect.height);
 
         types::FaceDetFullInfor face_det_item(

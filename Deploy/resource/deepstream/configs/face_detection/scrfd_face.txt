@@ -5,8 +5,8 @@ offsets=127.5;127.5;127.5
 net-scale-factor=0.0078125
 
 process-mode=1
-model-engine-file=../../models/scrfd_2.5g_4.engine
-onnx-file=../../models/scrfd_2.5g_4.onnx
+model-engine-file=../../models/scrfd_500m_640_1.engine
+onnx-file=../../models/scrfd_500m_640_1.onnx
 
 labelfile-path=labels.txt
 batch-size=1
@@ -14,7 +14,7 @@ batch-size=1
 network-mode=1
 network-type=3
 num-detected-classes=1
-interval=0
+interval=2
 cluster-mode=4
 network-mode=1
 

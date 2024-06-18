@@ -460,6 +460,6 @@ void DeepStreamManager::SubmitObjectData(types::FrameInfor& data_frame,
     number_processing_objects++;
   }
   if (number_processing_objects > 0) {
-    ai_controller->PushData(objects_full, source_id);
+        ai_controller->PushData(objects_full, source_id);
   }
 }

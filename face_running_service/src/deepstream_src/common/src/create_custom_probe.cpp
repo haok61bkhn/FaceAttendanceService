@@ -130,7 +130,6 @@ GstPadProbeReturn Probe::CustomProbe(GstPad* pad, GstPadProbeInfo* info,
       object.tracking_id = obj_meta->object_id;
 
       object.object_image = cpu_mat(cv::Rect(x1, y1, x2 - x1, y2 - y1)).clone();
-
       int padding_full = 50;
       int x1_full = std::max(0, object.rect.x - padding_full);
       int y1_full = std::max(0, object.rect.y - padding_full);

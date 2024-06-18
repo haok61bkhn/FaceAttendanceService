@@ -71,12 +71,13 @@ class MongoConsumer:
                 "timestamp": int(time_stamp),
                 "camera_name": camera_name,
             }
-            try:
-                response = requests.post(self.hook_url, json=data)
-                print("Hook response:", response.text)
-            except Exception as e:
-                print("Hook error:", e)
-                pass
+        print("HOOK",face_id)
+            # try:
+            #     response = requests.post(self.hook_url, json=data)
+            #     print("Hook response:", response.text)
+            # except Exception as e:
+            #     print("Hook error:", e)
+            #     pass
         return True
 
     def run(self):
@@ -84,6 +85,7 @@ class MongoConsumer:
             # reverse with sort([("time_stamp", -1)])
             cursor = self.collection.find().sort([("time_stamp", 1)])
             for document in cursor:
+                print("Document",document)
                 face_id = document["face_id"]
                 camera_id = document["camera_id"]
                 camera_name = document["camera_name"]
@@ -105,4 +107,4 @@ class MongoConsumer:
                         os.remove(object_image_full_path)
                     self.collection.delete_one({"_id": document["_id"]})
                     print("Hook success")
-            time.sleep(0.05)
+            time.sleep(0.1)

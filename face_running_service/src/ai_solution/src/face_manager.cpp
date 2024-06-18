@@ -53,6 +53,7 @@ bool FaceManager::LoadData() {
     std::remove(save_path_.c_str());
     return false;
   }
+  std::cout << "LOAD NUM DATA: " << alg_hnsw_->id_to_pid.size() << "\n";
   return true;
 }
 
@@ -144,6 +145,7 @@ std::vector<types::FaceSearchResult> FaceManager::Search(
       topk = topk_;
     auto gd = alg_hnsw_->searchKnn(p, topk);
     while (!gd.empty()) {
+      std::cout << "gd.top().first" << gd.top().first << "\n";
       if (gd.top().first <= threshold_) {
         types::FaceSearchResult faceif;
         index = gd.top().second;
