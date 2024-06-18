@@ -79,12 +79,10 @@ GstPadProbeReturn Probe::CustomProbe(GstPad* pad, GstPadProbeInfo* info,
     data_frame.frame_number = customData->frame_numbers[frame_meta->source_id];
 
     std::cout << "SOURCE ID: " << frame_meta->source_id
-              << " FPS: " << data_frame.fps << std::endl;
+              << " FPS: " << data_frame.fps
+              << " Number: " << frame_meta->num_obj_meta << std::endl;
     customData->last_times[frame_meta->source_id] = now_milli;
     data_frame.source_id = frame_meta->source_id;
-    // std::cout << "COLOR FORMAT: "
-    //           << surface->surfaceList[frame_meta->batch_id].colorFormat
-    //           << std::endl;
 
     if (frame_meta->num_obj_meta == 0) {
       continue;

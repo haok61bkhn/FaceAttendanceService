@@ -84,7 +84,8 @@ void AIController::ProcessUpdatingDataThread() {
       if (face_results.size() > 0) {
         auto& id = face_results[0].pid;
         auto& score = face_results[0].score;
-        std::cout << "id: " << id << std::endl;
+        std::cout << "id: " << id << " camera_id " << object_updating.camera_id
+                  << std::endl;
         auto& time_stamp = object_updating.time_stamp;
         if (ident_trackers.find(id) == ident_trackers.end()) {
           ident_trackers[id] = 0;
@@ -131,7 +132,6 @@ void AIController::Start() {
 void AIController::PushData(std::vector<types::ObjectInforFull>& objects,
                             int camera_index) {
   for (auto& object : objects) {
-    std::cout << "PushData" << std::endl;
     if (object.object.rect.width < MIN_FACE_WIDTH ||
         object.object.rect.height < MIN_FACE_HEIGHT) {
       continue;

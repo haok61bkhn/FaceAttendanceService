@@ -72,12 +72,12 @@ class MongoConsumer:
                 "camera_name": camera_name,
             }
         print("HOOK",face_id)
-            # try:
-            #     response = requests.post(self.hook_url, json=data)
-            #     print("Hook response:", response.text)
-            # except Exception as e:
-            #     print("Hook error:", e)
-            #     pass
+        try:
+            response = requests.post(self.hook_url, json=data)
+            print("Hook response:", response.text)
+        except Exception as e:
+            print("Hook error:", e)
+            pass
         return True
 
     def run(self):
